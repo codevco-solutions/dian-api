@@ -1,0 +1,524 @@
+{
+    "info": {
+        "_postman_id": "random-uuid",
+        "name": "DIAN API",
+        "description": "API para la gestión de documentos electrónicos DIAN",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "http://localhost:8000/api",
+            "type": "string"
+        },
+        {
+            "key": "token",
+            "value": "",
+            "type": "string"
+        }
+    ],
+    "item": [
+        {
+            "name": "Auth",
+            "description": "Endpoints de autenticación y gestión de usuarios",
+            "item": [
+                {
+                    "name": "Login",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"email\": \"admin@example.com\",\n    \"password\": \"password\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/login",
+                            "host": ["{{base_url}}"],
+                            "path": ["login"]
+                        },
+                        "description": "Iniciar sesión en el sistema"
+                    },
+                    "response": [
+                        {
+                            "name": "Success",
+                            "originalRequest": {
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"email\": \"admin@example.com\",\n    \"password\": \"password\"\n}"
+                                }
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": "json",
+                            "body": {
+                                "message": "Login exitoso",
+                                "user": {
+                                    "id": 1,
+                                    "name": "Admin",
+                                    "email": "admin@example.com"
+                                },
+                                "token": "1|example-token"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Register",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"Nuevo Usuario\",\n    \"email\": \"usuario@example.com\",\n    \"password\": \"password\",\n    \"password_confirmation\": \"password\",\n    \"phone\": \"3001234567\",\n    \"role_id\": 1,\n    \"company_id\": null,\n    \"branch_id\": null\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/register",
+                            "host": ["{{base_url}}"],
+                            "path": ["register"]
+                        },
+                        "description": "Registrar un nuevo usuario en el sistema"
+                    },
+                    "response": [
+                        {
+                            "name": "Success",
+                            "originalRequest": {
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"name\": \"Nuevo Usuario\",\n    \"email\": \"usuario@example.com\",\n    \"password\": \"password\",\n    \"password_confirmation\": \"password\",\n    \"phone\": \"3001234567\",\n    \"role_id\": 1\n}"
+                                }
+                            },
+                            "status": "Created",
+                            "code": 201,
+                            "_postman_previewlanguage": "json",
+                            "body": {
+                                "message": "Usuario registrado exitosamente",
+                                "user": {
+                                    "id": 2,
+                                    "name": "Nuevo Usuario",
+                                    "email": "usuario@example.com"
+                                },
+                                "token": "2|example-token"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Logout",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/logout",
+                            "host": ["{{base_url}}"],
+                            "path": ["logout"]
+                        },
+                        "description": "Cerrar sesión y revocar el token actual"
+                    },
+                    "response": [
+                        {
+                            "name": "Success",
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": "json",
+                            "body": {
+                                "message": "Sesión cerrada exitosamente"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "User Profile",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/user",
+                            "host": ["{{base_url}}"],
+                            "path": ["user"]
+                        },
+                        "description": "Obtener el perfil del usuario autenticado"
+                    },
+                    "response": [
+                        {
+                            "name": "Success",
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": "json",
+                            "body": {
+                                "id": 1,
+                                "name": "Admin",
+                                "email": "admin@example.com",
+                                "role": {
+                                    "id": 1,
+                                    "name": "Super Administrator"
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Companies",
+            "description": "Gestión de compañías",
+            "item": [
+                {
+                    "name": "List Companies",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/companies",
+                            "host": ["{{base_url}}"],
+                            "path": ["companies"]
+                        },
+                        "description": "Obtener lista de compañías"
+                    }
+                },
+                {
+                    "name": "Create Company",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"business_name\": \"Mi Empresa SAS\",\n    \"trade_name\": \"Mi Empresa\",\n    \"tax_id\": \"900123456-7\",\n    \"tax_regime\": \"Régimen Simple\",\n    \"economic_activity\": \"6201 - Desarrollo de software\",\n    \"address\": \"Calle 123 # 45-67\",\n    \"phone\": \"3001234567\",\n    \"email\": \"info@miempresa.com\",\n    \"website\": \"https://miempresa.com\",\n    \"subdomain\": \"miempresa\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/companies",
+                            "host": ["{{base_url}}"],
+                            "path": ["companies"]
+                        },
+                        "description": "Crear una nueva compañía"
+                    }
+                },
+                {
+                    "name": "Show Company",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/companies/1",
+                            "host": ["{{base_url}}"],
+                            "path": ["companies", "1"]
+                        },
+                        "description": "Ver detalles de una compañía específica"
+                    }
+                },
+                {
+                    "name": "Update Company",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"business_name\": \"Mi Empresa SAS\",\n    \"trade_name\": \"Mi Empresa\",\n    \"tax_id\": \"900123456-7\",\n    \"tax_regime\": \"Régimen Simple\",\n    \"economic_activity\": \"6201 - Desarrollo de software\",\n    \"address\": \"Calle 123 # 45-67\",\n    \"phone\": \"3001234567\",\n    \"email\": \"info@miempresa.com\",\n    \"website\": \"https://miempresa.com\",\n    \"subdomain\": \"miempresa\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/companies/1",
+                            "host": ["{{base_url}}"],
+                            "path": ["companies", "1"]
+                        },
+                        "description": "Actualizar una compañía existente"
+                    }
+                },
+                {
+                    "name": "Delete Company",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/companies/1",
+                            "host": ["{{base_url}}"],
+                            "path": ["companies", "1"]
+                        },
+                        "description": "Eliminar una compañía"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Branches",
+            "description": "Gestión de sucursales",
+            "item": [
+                {
+                    "name": "List Branches",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/branches",
+                            "host": ["{{base_url}}"],
+                            "path": ["branches"]
+                        },
+                        "description": "Obtener lista de sucursales"
+                    }
+                },
+                {
+                    "name": "Create Branch",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"company_id\": 1,\n    \"name\": \"Sucursal Principal\",\n    \"code\": \"SUC001\",\n    \"address\": \"Calle 123 # 45-67\",\n    \"phone\": \"3001234567\",\n    \"email\": \"sucursal@miempresa.com\",\n    \"is_main\": true\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/branches",
+                            "host": ["{{base_url}}"],
+                            "path": ["branches"]
+                        },
+                        "description": "Crear una nueva sucursal"
+                    }
+                },
+                {
+                    "name": "Show Branch",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/branches/1",
+                            "host": ["{{base_url}}"],
+                            "path": ["branches", "1"]
+                        },
+                        "description": "Ver detalles de una sucursal específica"
+                    }
+                },
+                {
+                    "name": "Update Branch",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"company_id\": 1,\n    \"name\": \"Sucursal Principal\",\n    \"code\": \"SUC001\",\n    \"address\": \"Calle 123 # 45-67\",\n    \"phone\": \"3001234567\",\n    \"email\": \"sucursal@miempresa.com\",\n    \"is_main\": true\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/branches/1",
+                            "host": ["{{base_url}}"],
+                            "path": ["branches", "1"]
+                        },
+                        "description": "Actualizar una sucursal existente"
+                    }
+                },
+                {
+                    "name": "Delete Branch",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/branches/1",
+                            "host": ["{{base_url}}"],
+                            "path": ["branches", "1"]
+                        },
+                        "description": "Eliminar una sucursal"
+                    }
+                }
+            ]
+        }
+    ]
+}
