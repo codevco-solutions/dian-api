@@ -22,16 +22,25 @@ class StoreCompanyRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'business_name' => ['required', 'string', 'max:255'],
-            'trade_name' => ['nullable', 'string', 'max:255'],
-            'tax_id' => ['required', 'string', 'unique:companies'],
-            'tax_regime' => ['required', 'string'],
-            'economic_activity' => ['required', 'string'],
-            'address' => ['required', 'string'],
-            'phone' => ['required', 'string'],
-            'email' => ['required', 'email', 'unique:companies'],
-            'website' => ['nullable', 'url'],
-            'subdomain' => ['required', 'string', 'unique:companies', 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/'],
+            'business_name' => 'required|string|max:255',
+            'trade_name' => 'required|string|max:255',
+            'tax_id' => 'required|string|max:20|unique:companies',
+            'tax_regime' => 'required|string|max:50',
+            'economic_activity' => 'required|string|max:50',
+            'address' => 'required|string|max:255',
+            'phone' => 'required|string|max:20',
+            'email' => 'required|email|max:255|unique:companies',
+            'website' => 'nullable|url|max:255',
+            'logo' => 'nullable|string|max:255',
+            'subdomain' => [
+                'required',
+                'string',
+                'max:63',
+                'unique:companies',
+                'regex:/^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/',
+            ],
+            'is_active' => 'boolean',
+            'dian_settings' => 'nullable|array'
         ];
     }
 
@@ -49,9 +58,10 @@ class StoreCompanyRequest extends FormRequest
             'email.email' => 'El correo electrónico debe ser válido',
             'email.unique' => 'El correo electrónico ya está registrado',
             'website.url' => 'El sitio web debe ser una URL válida',
-            'subdomain.required' => 'El subdominio es requerido',
-            'subdomain.unique' => 'El subdominio ya está registrado',
-            'subdomain.regex' => 'El subdominio solo puede contener letras minúsculas, números y guiones',
+            'subdomain.required' => 'El subdominio es requerido.',
+            'subdomain.unique' => 'Este subdominio ya está en uso.',
+            'subdomain.regex' => 'El subdominio solo puede contener letras minúsculas, números y guiones. Debe comenzar y terminar con letra o número.',
+            'subdomain.max' => 'El subdominio no puede tener más de 63 caracteres.'
         ];
     }
 }

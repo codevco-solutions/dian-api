@@ -185,5 +185,7 @@ return [
     |
     */
 
-    'aliases' => [],
+    'aliases' => [
+        'Route' => Illuminate\Support\Facades\Route::class,
+    ],
 ];

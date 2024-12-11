@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Database\Seeders\RoleSeeder;
+use Database\Seeders\MasterTablesSeeder;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -17,6 +18,7 @@ class DatabaseSeeder extends Seeder
         // First create roles
         $this->call([
             RoleSeeder::class,
+            MasterTablesSeeder::class,
         ]);
 
         // Then create the test user with super-admin role

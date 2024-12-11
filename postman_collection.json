@@ -8,12 +8,7 @@
     "variable": [
         {
             "key": "base_url",
-            "value": "http://localhost:8000/api",
-            "type": "string"
-        },
-        {
-            "key": "token",
-            "value": "",
+            "value": "http://dian-api.test/api",
             "type": "string"
         }
     ],
@@ -40,12 +35,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"email\": \"admin@example.com\",\n    \"password\": \"password\"\n}",
-                            "options": {
-                                "raw": {
-                                    "language": "json"
-                                }
-                            }
+                            "raw": "{\n    \"email\": \"usuario@test.com\",\n    \"password\": \"password123\"\n}"
                         },
                         "url": {
                             "raw": "{{base_url}}/login",
@@ -53,30 +43,7 @@
                             "path": ["login"]
                         },
                         "description": "Iniciar sesión en el sistema"
-                    },
-                    "response": [
-                        {
-                            "name": "Success",
-                            "originalRequest": {
-                                "body": {
-                                    "mode": "raw",
-                                    "raw": "{\n    \"email\": \"admin@example.com\",\n    \"password\": \"password\"\n}"
-                                }
-                            },
-                            "status": "OK",
-                            "code": 200,
-                            "_postman_previewlanguage": "json",
-                            "body": {
-                                "message": "Login exitoso",
-                                "user": {
-                                    "id": 1,
-                                    "name": "Admin",
-                                    "email": "admin@example.com"
-                                },
-                                "token": "1|example-token"
-                            }
-                        }
-                    ]
+                    }
                 },
                 {
                     "name": "Register",
@@ -96,43 +63,15 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"name\": \"Nuevo Usuario\",\n    \"email\": \"usuario@example.com\",\n    \"password\": \"password\",\n    \"password_confirmation\": \"password\",\n    \"phone\": \"3001234567\",\n    \"role_id\": 1,\n    \"company_id\": null,\n    \"branch_id\": null\n}",
-                            "options": {
-                                "raw": {
-                                    "language": "json"
-                                }
-                            }
+                            "raw": "{\n    \"name\": \"Usuario Prueba\",\n    \"email\": \"usuario@test.com\",\n    \"password\": \"password123\",\n    \"password_confirmation\": \"password123\",\n    \"phone\": \"3001234567\",\n    \"role_id\": 1\n}"
                         },
                         "url": {
                             "raw": "{{base_url}}/register",
                             "host": ["{{base_url}}"],
                             "path": ["register"]
                         },
-                        "description": "Registrar un nuevo usuario en el sistema"
-                    },
-                    "response": [
-                        {
-                            "name": "Success",
-                            "originalRequest": {
-                                "body": {
-                                    "mode": "raw",
-                                    "raw": "{\n    \"name\": \"Nuevo Usuario\",\n    \"email\": \"usuario@example.com\",\n    \"password\": \"password\",\n    \"password_confirmation\": \"password\",\n    \"phone\": \"3001234567\",\n    \"role_id\": 1\n}"
-                                }
-                            },
-                            "status": "Created",
-                            "code": 201,
-                            "_postman_previewlanguage": "json",
-                            "body": {
-                                "message": "Usuario registrado exitosamente",
-                                "user": {
-                                    "id": 2,
-                                    "name": "Nuevo Usuario",
-                                    "email": "usuario@example.com"
-                                },
-                                "token": "2|example-token"
-                            }
-                        }
-                    ]
+                        "description": "Registrar un nuevo usuario"
+                    }
                 },
                 {
                     "name": "Logout",
@@ -155,22 +94,11 @@
                             "host": ["{{base_url}}"],
                             "path": ["logout"]
                         },
-                        "description": "Cerrar sesión y revocar el token actual"
-                    },
-                    "response": [
-                        {
-                            "name": "Success",
-                            "status": "OK",
-                            "code": 200,
-                            "_postman_previewlanguage": "json",
-                            "body": {
-                                "message": "Sesión cerrada exitosamente"
-                            }
-                        }
-                    ]
+                        "description": "Cerrar sesión"
+                    }
                 },
                 {
-                    "name": "User Profile",
+                    "name": "Profile",
                     "request": {
                         "method": "GET",
                         "header": [
@@ -186,29 +114,12 @@
                             }
                         ],
                         "url": {
-                            "raw": "{{base_url}}/user",
+                            "raw": "{{base_url}}/profile",
                             "host": ["{{base_url}}"],
-                            "path": ["user"]
+                            "path": ["profile"]
                         },
-                        "description": "Obtener el perfil del usuario autenticado"
-                    },
-                    "response": [
-                        {
-                            "name": "Success",
-                            "status": "OK",
-                            "code": 200,
-                            "_postman_previewlanguage": "json",
-                            "body": {
-                                "id": 1,
-                                "name": "Admin",
-                                "email": "admin@example.com",
-                                "role": {
-                                    "id": 1,
-                                    "name": "Super Administrator"
-                                }
-                            }
-                        }
-                    ]
+                        "description": "Obtener perfil del usuario autenticado"
+                    }
                 }
             ]
         },
@@ -263,12 +174,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"business_name\": \"Mi Empresa SAS\",\n    \"trade_name\": \"Mi Empresa\",\n    \"tax_id\": \"900123456-7\",\n    \"tax_regime\": \"Régimen Simple\",\n    \"economic_activity\": \"6201 - Desarrollo de software\",\n    \"address\": \"Calle 123 # 45-67\",\n    \"phone\": \"3001234567\",\n    \"email\": \"info@miempresa.com\",\n    \"website\": \"https://miempresa.com\",\n    \"subdomain\": \"miempresa\"\n}",
-                            "options": {
-                                "raw": {
-                                    "language": "json"
-                                }
-                            }
+                            "raw": "{\n    \"business_name\": \"Empresa de Prueba\",\n    \"trade_name\": \"Empresa Test\",\n    \"tax_id\": \"900123456-7\",\n    \"tax_regime\": \"Régimen Simple\",\n    \"economic_activity\": \"6201 - Desarrollo de software\",\n    \"phone\": \"3001234567\",\n    \"email\": \"empresa@test.com\",\n    \"address\": \"Calle Principal #123\",\n    \"city\": \"Bogotá\",\n    \"state\": \"Cundinamarca\",\n    \"country\": \"Colombia\",\n    \"postal_code\": \"110111\",\n    \"subdomain\": \"empresa-test\"\n}"
                         },
                         "url": {
                             "raw": "{{base_url}}/companies",
@@ -299,7 +205,7 @@
                             "host": ["{{base_url}}"],
                             "path": ["companies", "1"]
                         },
-                        "description": "Ver detalles de una compañía específica"
+                        "description": "Obtener detalles de una compañía específica"
                     }
                 },
                 {
@@ -325,12 +231,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"business_name\": \"Mi Empresa SAS\",\n    \"trade_name\": \"Mi Empresa\",\n    \"tax_id\": \"900123456-7\",\n    \"tax_regime\": \"Régimen Simple\",\n    \"economic_activity\": \"6201 - Desarrollo de software\",\n    \"address\": \"Calle 123 # 45-67\",\n    \"phone\": \"3001234567\",\n    \"email\": \"info@miempresa.com\",\n    \"website\": \"https://miempresa.com\",\n    \"subdomain\": \"miempresa\"\n}",
-                            "options": {
-                                "raw": {
-                                    "language": "json"
-                                }
-                            }
+                            "raw": "{\n    \"business_name\": \"Empresa de Prueba Actualizada\",\n    \"trade_name\": \"Empresa Test Update\",\n    \"tax_id\": \"900123456-7\",\n    \"tax_regime\": \"Régimen Simple\",\n    \"economic_activity\": \"6201 - Desarrollo de software\",\n    \"phone\": \"3001234567\",\n    \"email\": \"empresa@test.com\",\n    \"address\": \"Calle Principal #123\",\n    \"city\": \"Bogotá\",\n    \"state\": \"Cundinamarca\",\n    \"country\": \"Colombia\",\n    \"postal_code\": \"110111\",\n    \"subdomain\": \"empresa-test\"\n}"
                         },
                         "url": {
                             "raw": "{{base_url}}/companies/1",
@@ -417,12 +318,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"company_id\": 1,\n    \"name\": \"Sucursal Principal\",\n    \"code\": \"SUC001\",\n    \"address\": \"Calle 123 # 45-67\",\n    \"phone\": \"3001234567\",\n    \"email\": \"sucursal@miempresa.com\",\n    \"is_main\": true\n}",
-                            "options": {
-                                "raw": {
-                                    "language": "json"
-                                }
-                            }
+                            "raw": "{\n    \"name\": \"Sucursal Principal\",\n    \"address\": \"Av. Principal #456\",\n    \"phone\": \"3007654321\",\n    \"email\": \"sucursal@test.com\",\n    \"city\": \"Bogotá\",\n    \"state\": \"Cundinamarca\",\n    \"country\": \"Colombia\",\n    \"postal_code\": \"110111\",\n    \"company_id\": 1\n}"
                         },
                         "url": {
                             "raw": "{{base_url}}/branches",
@@ -453,7 +349,7 @@
                             "host": ["{{base_url}}"],
                             "path": ["branches", "1"]
                         },
-                        "description": "Ver detalles de una sucursal específica"
+                        "description": "Obtener detalles de una sucursal específica"
                     }
                 },
                 {
@@ -479,12 +375,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"company_id\": 1,\n    \"name\": \"Sucursal Principal\",\n    \"code\": \"SUC001\",\n    \"address\": \"Calle 123 # 45-67\",\n    \"phone\": \"3001234567\",\n    \"email\": \"sucursal@miempresa.com\",\n    \"is_main\": true\n}",
-                            "options": {
-                                "raw": {
-                                    "language": "json"
-                                }
-                            }
+                            "raw": "{\n    \"name\": \"Sucursal Principal Actualizada\",\n    \"address\": \"Av. Principal #456\",\n    \"phone\": \"3007654321\",\n    \"email\": \"sucursal@test.com\",\n    \"city\": \"Bogotá\",\n    \"state\": \"Cundinamarca\",\n    \"country\": \"Colombia\",\n    \"postal_code\": \"110111\",\n    \"company_id\": 1\n}"
                         },
                         "url": {
                             "raw": "{{base_url}}/branches/1",

@@ -3,9 +3,9 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use App\Models\Company;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use App\Models\Company; // Import the Company model
 
 class CheckCompanySubdomain
 {
@@ -17,7 +17,7 @@ class CheckCompanySubdomain
     public function handle(Request $request, Closure $next): Response
     {
         $host = $request->getHost();
-        $mainDomain = config('app.main_domain', 'localhost');
+        $mainDomain = env('APP_DOMAIN', 'dian-api.test');
         
         // Si es el dominio principal, permitir el acceso
         if ($host === $mainDomain) {
@@ -25,18 +25,23 @@ class CheckCompanySubdomain
         }
 
         // Obtener el subdominio
-        $subdomain = explode('.', $host)[0];
-
-        // Buscar la compañía por el subdominio
-        $company = Company::where('subdomain', $subdomain)->first();
-
-        if (!$company) {
-            return response()->json(['message' => 'Compañía no encontrada'], 404);
+        $parts = explode('.', $host);
+        if (count($parts) < 2) {
+            return response()->json(['message' => 'Subdominio inválido'], 400);
         }
 
-        // Verificar si la compañía está activa
-        if (!$company->is_active) {
-            return response()->json(['message' => 'Compañía inactiva'], 403);
+        $subdomain = $parts[0];
+
+        // Buscar la compañía por el subdominio
+        $company = Company::where('subdomain', $subdomain)
+                        ->where('is_active', true)
+                        ->first();
+
+        if (!$company) {
+            return response()->json([
+                'message' => 'Compañía no encontrada o inactiva',
+                'subdomain' => $subdomain
+            ], 404);
         }
 
         // Agregar la compañía a la solicitud para uso posterior
