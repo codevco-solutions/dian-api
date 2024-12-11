@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\API\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -24,7 +24,7 @@ class AuthController extends Controller
         }
 
         $user = User::where('email', $request->email)->firstOrFail();
-        
+
         // Verificar si el usuario está activo
         if (!$user->is_active) {
             return response()->json([
@@ -41,6 +41,7 @@ class AuthController extends Controller
         return response()->json([
             'access_token' => $token,
             'token_type' => 'Bearer',
+            'message' => 'Usuario loggeado exitosamente',
             'user' => $user
         ]);
     }
@@ -57,7 +58,7 @@ class AuthController extends Controller
     public function profile(Request $request)
     {
         $user = $request->user()->load(['role', 'company', 'branch']);
-        
+
         return response()->json($user);
     }
 
@@ -71,9 +72,10 @@ class AuthController extends Controller
         $token = $user->createToken('auth-token')->plainTextToken;
 
         return response()->json([
+            'token' => $token,
+            'token_type' => 'Bearer',
             'message' => 'Usuario registrado exitosamente',
-            'user' => $user,
-            'token' => $token
+            'user' => $user
         ], 201);
     }
 }

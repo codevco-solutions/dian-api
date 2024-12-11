@@ -58,14 +58,20 @@ class Company extends Model
         });
     }
 
-    public function users()
-    {
-        return $this->hasMany(User::class);
-    }
-
+    /**
+     * Get the branches for the company.
+     */
     public function branches()
     {
         return $this->hasMany(Branch::class);
+    }
+
+    /**
+     * Get the users for the company.
+     */
+    public function users()
+    {
+        return $this->hasMany(User::class);
     }
 
     public function mainBranch()

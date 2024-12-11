@@ -53,28 +53,51 @@ class User extends Authenticatable
         'settings' => 'array'
     ];
 
+    /**
+     * Get the company that owns the user.
+     */
     public function company()
     {
         return $this->belongsTo(Company::class);
     }
 
+    /**
+     * Get the role that owns the user.
+     */
     public function role()
     {
         return $this->belongsTo(Role::class);
     }
 
+    /**
+     * Get the branch that owns the user.
+     */
     public function branch()
     {
         return $this->belongsTo(Branch::class);
     }
 
-    public function isSuperAdmin()
+    /**
+     * Check if the user is a super admin.
+     */
+    public function isSuperAdmin(): bool
     {
-        return $this->role->slug === 'super-admin';
+        return $this->role && $this->role->slug === 'super-admin';
     }
 
-    public function isCompanyAdmin()
+    /**
+     * Check if the user is a company admin.
+     */
+    public function isCompanyAdmin(): bool
     {
-        return $this->role->slug === 'company-admin';
+        return $this->role && $this->role->slug === 'company-admin';
+    }
+
+    /**
+     * Check if the user is a regular user.
+     */
+    public function isUser(): bool
+    {
+        return $this->role && $this->role->slug === 'user';
     }
 }

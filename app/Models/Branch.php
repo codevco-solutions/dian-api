@@ -43,11 +43,17 @@ class Branch extends Model
         });
     }
 
+    /**
+     * Get the company that owns the branch.
+     */
     public function company()
     {
         return $this->belongsTo(Company::class);
     }
 
+    /**
+     * Get the users for the branch.
+     */
     public function users()
     {
         return $this->hasMany(User::class);
