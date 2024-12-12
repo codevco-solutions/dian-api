@@ -3,12 +3,13 @@
 ## Estructura y Convenciones
 
 ### Convenciones de Nomenclatura
-- Controladores: Sufijo `Controller` (ej: `CustomerController`)
-- Modelos: Singular (ej: `Customer`)
-- Requests: Prefijo acción + Sufijo `Request` (ej: `StoreCustomerRequest`)
+- Controladores: Sufijo `Controller` (ej: `CompanyController`)
+- Modelos: Singular (ej: `Company`)
+- Requests: Prefijo acción + Sufijo `Request` (ej: `StoreCompanyRequest`)
+- Resources: Sufijo `Resource` (ej: `CompanyResource`)
 
 ### Estándares API
-- Prefijo: `/api/v1/`
+- Prefijo: `/api`
 - Respuestas en JSON
 - Autenticación: Laravel Sanctum
 - Multitenancy: Basado en subdominios
@@ -17,11 +18,32 @@
 
 ### Controladores
 ```
-app/Http/Controllers/
-├── API/
-│   ├── AuthController.php       # Autenticación y gestión de usuarios
-│   ├── CompanyController.php    # CRUD de empresas
-│   └── BranchController.php     # CRUD de sucursales
+app/Http/Controllers/API/
+├── Auth/
+│   └── AuthController.php           # Autenticación y gestión de usuarios
+├── Company/
+│   └── CompanyController.php        # CRUD de empresas
+├── Branch/
+│   └── BranchController.php         # CRUD de sucursales
+├── User/
+│   └── UserController.php           # CRUD de usuarios
+└── MasterTable/                     # Controladores de tablas maestras
+    ├── LocationController.php       # Países, Estados, Ciudades
+    ├── CurrencyController.php       # Monedas
+    ├── IdentificationTypeController.php
+    ├── OrganizationTypeController.php
+    ├── TaxRegimeController.php
+    ├── TaxResponsibilityController.php
+    ├── OperationTypeController.php
+    ├── DocumentTypeController.php
+    ├── PaymentMeansController.php
+    ├── PaymentMethodController.php
+    ├── MeasurementUnitController.php
+    ├── TaxController.php
+    ├── ReferencePriceController.php
+    ├── DiscountTypeController.php
+    ├── ChargeTypeController.php
+    └── EventTypeController.php
 ```
 
 ### Modelos
@@ -29,65 +51,154 @@ app/Http/Controllers/
 app/Models/
 ├── User.php
 ├── Company.php
-└── Branch.php
+├── Branch.php
+└── MasterTable/
+    ├── Currency.php
+    ├── IdentificationType.php
+    ├── OrganizationType.php
+    ├── TaxRegime.php
+    ├── TaxResponsibility.php
+    ├── OperationType.php
+    ├── DocumentType.php
+    ├── PaymentMeans.php
+    ├── PaymentMethod.php
+    ├── MeasurementUnit.php
+    ├── Tax.php
+    ├── ReferencePrice.php
+    ├── DiscountType.php
+    ├── ChargeType.php
+    └── EventType.php
+```
+
+### Servicios
+```
+app/Services/
+├── Auth/
+│   └── AuthService.php
+├── Company/
+│   └── CompanyService.php
+├── Branch/
+│   └── BranchService.php
+├── User/
+│   └── UserService.php
+└── MasterTable/
+    └── MasterTableService.php
+```
+
+### Repositorios
+```
+app/Repositories/
+├── Contracts/                       # Interfaces
+│   ├── Auth/
+│   ├── Company/
+│   ├── Branch/
+│   ├── User/
+│   └── MasterTable/
+└── Eloquent/                        # Implementaciones
+    ├── Auth/
+    ├── Company/
+    ├── Branch/
+    ├── User/
+    └── MasterTable/
 ```
 
 ### Migraciones
 ```
 database/migrations/
+├── 0001_01_01_000000_create_users_table.php
+├── 0001_01_01_000001_create_cache_table.php
+├── 0001_01_01_000002_create_jobs_table.php
 ├── 2014_10_11_000000_create_master_tables.php    # Tablas maestras DIAN
 ├── 2024_12_10_180504_create_personal_access_tokens_table.php
 ├── 2024_12_10_181004_create_roles_table.php
 ├── 2024_12_10_181028_create_companies_table.php
-└── 2024_12_10_181043_create_branches_table.php
-```
-
-### Seeders
-```
-database/seeders/
-├── DatabaseSeeder.php
-├── RoleSeeder.php
-├── MasterTablesSeeder.php
-├── CountriesTableSeeder.php
-└── DianMasterTablesSeeder.php
+├── 2024_12_10_181043_create_branches_table.php
+├── 2024_12_10_182442_modify_users_table.php
+└── 2024_12_11_030456_add_prefix_and_group_to_operation_types.php
 ```
 
 ## Módulos Implementados
 
 ### Auth
-- Autenticación con Sanctum
-- Gestión de usuarios y roles
+- Registro de usuarios
+- Login/Logout con Sanctum
+- Gestión de perfiles
 - Middleware de autenticación
 
 ### Companies
 - CRUD completo de empresas
+- Búsqueda por subdominio y NIT
+- Gestión de sucursales asociadas
 - Validación de datos fiscales
-- Integración con tablas maestras
 
 ### Branches
 - CRUD completo de sucursales
 - Vinculación con empresas
+- Gestión de usuarios por sucursal
 - Validación de ubicaciones
 
-## Próximos Módulos
+### Users
+- CRUD completo de usuarios
+- Asociación con compañías y sucursales
+- Gestión de roles y permisos
+- Validación de permisos
 
-### Customers (En desarrollo)
-- CRUD de clientes
-- Validación de documentos
-- Información fiscal
-- Direcciones de entrega
+### Master Tables
+1. **Ubicaciones**
+   - Países (countries)
+   - Estados/Departamentos (states)
+   - Ciudades/Municipios (cities)
 
-### Documents (Pendiente)
-- Gestión de documentos electrónicos
-- Integración con DIAN
-- Eventos y notificaciones
+2. **Identificación y Organización**
+   - Tipos de identificación (identification_types)
+   - Tipos de organización (organization_types)
+   - Regímenes tributarios (tax_regimes)
+   - Responsabilidades tributarias (tax_responsibilities)
 
-## Notas de Implementación
-- Cada módulo nuevo seguirá el patrón Repository
-- Los módulos existentes se mantendrán con su estructura actual
-- Migración gradual a nueva arquitectura según necesidad
+3. **Operaciones y Documentos**
+   - Tipos de operación (operation_types)
+   - Tipos de documento (document_types)
+   - Medios de pago (payment_means)
+   - Métodos de pago (payment_methods)
+
+4. **Medidas y Tributos**
+   - Unidades de medida (measurement_units)
+   - Monedas (currencies)
+   - Tributos (taxes)
+
+5. **Comercial**
+   - Tipos de referencia de precios (reference_prices)
+   - Tipos de descuento (discount_types)
+   - Tipos de cargo (charge_types)
+   - Tipos de evento (event_types)
 
 ## Registro de Cambios
+
+### 2024-12-11
+
+#### Implementación de Tablas Maestras
+
+##### Nuevos Modelos Creados
+- Creados modelos específicos para cada tabla maestra en `app/Models/MasterTable/`
+- Implementado scope `active()` en todos los modelos
+- Agregados campos fillable y casts apropiados
+- Implementadas relaciones necesarias (ej: PaymentMeans con PaymentMethods)
+
+##### Nuevos Controladores
+- Creados controladores para cada tabla maestra en `app/Http/Controllers/API/MasterTable/`
+- Todos heredan de `MasterTableController` para funcionalidad común
+- Implementado CRUD completo (index, show, store, update, delete, active)
+
+##### Rutas Actualizadas
+- Agregadas rutas para todas las tablas maestras
+- Implementado patrón consistente para endpoints
+- Soporte para operaciones CRUD y listado de registros activos
+
+##### Mejoras Generales
+- Implementada paginación estándar
+- Agregados filtros comunes (search, is_active, sort)
+- Validación consistente en todas las operaciones
+- Respuestas estandarizadas mediante Resources
 
 ### 2024-12-10
 
@@ -139,3 +250,16 @@ database/seeders/
 - Se ha priorizado la seguridad y la robustez del sistema
 - Se mantiene el patrón de diseño Repository
 - Se han agregado validaciones adicionales para mejorar la integridad de los datos
+
+## Notas de Implementación
+- Se sigue el patrón Repository en todos los módulos
+- Implementación consistente de filtros y paginación
+- Validación robusta en todas las operaciones
+- Manejo estandarizado de errores y respuestas
+
+## Próximos Pasos
+1. Implementar seeders para todas las tablas maestras
+2. Agregar validaciones específicas por tipo de documento
+3. Implementar caché para tablas maestras
+4. Agregar pruebas automatizadas
+5. Documentar API con Swagger/OpenAPI

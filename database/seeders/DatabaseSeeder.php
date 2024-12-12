@@ -2,10 +2,12 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
+use App\Models\Auth\User;
 use Database\Seeders\RoleSeeder;
 use Database\Seeders\MasterTablesSeeder;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Database\Seeders\CompanySeeder;
+use Database\Seeders\BranchSeeder;
+use Database\Seeders\UserSeeder;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -15,17 +17,24 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // First create roles
         $this->call([
             RoleSeeder::class,
             MasterTablesSeeder::class,
+            CompanySeeder::class,
+            BranchSeeder::class,
+            UserSeeder::class,
         ]);
 
         // Then create the test user with super-admin role
-        User::factory()->create([
+        $user = User::create([
             'name' => 'Super Admin',
-            'email' => 'admin@example.com',
-            'role_id' => 1, // super-admin role
+            'email' => 'admin@dian-api.test',
+            'password' => bcrypt('password'),
+            'is_active' => true,
+            'role_id' => 1,
         ]);
+
+        // Asignar el rol de super-admin
+        $user->assignRole('super-admin');
     }
 }

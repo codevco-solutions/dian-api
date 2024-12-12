@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Role; // Add this line to import the Role model
+use Spatie\Permission\Models\Role;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -15,19 +15,16 @@ class RoleSeeder extends Seeder
     {
         $roles = [
             [
-                'name' => 'Super Administrador',
-                'slug' => 'super-admin',
-                'description' => 'Usuario con acceso total al sistema'
+                'name' => 'super-admin',
+                'guard_name' => 'web'
             ],
             [
-                'name' => 'Administrador de Compañía',
-                'slug' => 'company-admin',
-                'description' => 'Usuario con acceso total a su compañía'
+                'name' => 'company-admin',
+                'guard_name' => 'web'
             ],
             [
-                'name' => 'Usuario',
-                'slug' => 'user',
-                'description' => 'Usuario con acceso limitado a su compañía'
+                'name' => 'user',
+                'guard_name' => 'web'
             ]
         ];
 

@@ -5,8 +5,9 @@ namespace App\Http\Controllers\API\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
+use App\Models\Auth\User;
 use App\Http\Requests\Auth\RegisterRequest;
+use Spatie\Permission\Models\Role;
 
 class AuthController extends Controller
 {
@@ -33,7 +34,7 @@ class AuthController extends Controller
         }
 
         // Cargar relaciones necesarias
-        $user->load(['role', 'company', 'branch']);
+        $user->load(['roles', 'company', 'branch']);
 
         // Crear token con el nombre del dispositivo
         $token = $user->createToken('auth_token')->plainTextToken;
@@ -57,7 +58,7 @@ class AuthController extends Controller
 
     public function profile(Request $request)
     {
-        $user = $request->user()->load(['role', 'company', 'branch']);
+        $user = $request->user()->load(['roles', 'company', 'branch']);
 
         return response()->json($user);
     }
@@ -69,7 +70,15 @@ class AuthController extends Controller
         $data['is_active'] = true;
 
         $user = User::create($data);
+        
+        // Asignar el rol al usuario
+        $role = Role::findById($data['role_id']);
+        $user->assignRole($role);
+
         $token = $user->createToken('auth-token')->plainTextToken;
+
+        // Cargar las relaciones necesarias
+        $user->load(['roles', 'company', 'branch']);
 
         return response()->json([
             'token' => $token,

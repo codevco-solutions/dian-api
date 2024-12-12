@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Spatie\Permission\Traits\HasRoles;
 
 class CompanyController extends Controller
 {
@@ -23,17 +24,38 @@ class CompanyController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::user();
-        $role = $user->role;
         
-        if ($role && $role->slug === 'super-admin') {
-            $companies = $this->companyService->getAll();
+        // Get pagination parameters
+        $perPage = $request->input('per_page', 15);
+        
+        // Get filter parameters
+        $filters = $request->only([
+            'business_name',
+            'commercial_name',
+            'nit',
+            'address',
+            'is_active'
+        ]);
+        
+        // Get sorting parameters
+        $orderBy = [];
+        if ($request->has('sort_by')) {
+            $sortBy = $request->input('sort_by');
+            $sortDirection = $request->input('sort_direction', 'asc');
+            $orderBy[$sortBy] = $sortDirection;
+        } else {
+            $orderBy['created_at'] = 'desc';
+        }
+
+        if ($user->hasRole('super-admin')) {
+            $companies = $this->companyService->getAll($perPage, $filters, $orderBy);
         } else {
             // Si no es super admin, solo obtiene su propia compañía
             $company = $this->companyService->find($user->company_id);
-            $companies = collect([$company]);
+            $companies = collect([$company])->paginate($perPage);
         }
 
         // Cargar la relación de sucursales
@@ -41,7 +63,15 @@ class CompanyController extends Controller
 
         return response()->json([
             'message' => 'Companies retrieved successfully',
-            'data' => CompanyResource::collection($companies)
+            'data' => CompanyResource::collection($companies),
+            'meta' => [
+                'current_page' => $companies->currentPage(),
+                'from' => $companies->firstItem(),
+                'last_page' => $companies->lastPage(),
+                'per_page' => $companies->perPage(),
+                'to' => $companies->lastItem(),
+                'total' => $companies->total(),
+            ]
         ]);
     }
 
@@ -74,9 +104,8 @@ class CompanyController extends Controller
             $company->load('branches');
 
             $user = Auth::user();
-            $role = $user->role;
 
-            if (!($role && $role->slug === 'super-admin') && $user->company_id !== $company->id) {
+            if (!$user->hasRole('super-admin') && $user->company_id !== $company->id) {
                 return response()->json([
                     'message' => 'Unauthorized to view this company'
                 ], Response::HTTP_FORBIDDEN);
@@ -103,9 +132,8 @@ class CompanyController extends Controller
             $existingCompany = $this->companyService->find($id);
 
             $user = Auth::user();
-            $role = $user->role;
 
-            if (!($role && $role->slug === 'super-admin') && $user->company_id !== $existingCompany->id) {
+            if (!$user->hasRole('super-admin') && $user->company_id !== $existingCompany->id) {
                 return response()->json([
                     'message' => 'Unauthorized to update this company'
                 ], Response::HTTP_FORBIDDEN);
@@ -155,9 +183,8 @@ class CompanyController extends Controller
             $company = $this->companyService->find($id);
             
             $user = Auth::user();
-            $role = $user->role;
 
-            if (!($role && $role->slug === 'super-admin') && $user->company_id !== $company->id) {
+            if (!$user->hasRole('super-admin') && $user->company_id !== $company->id) {
                 return response()->json([
                     'message' => 'Unauthorized to delete this company'
                 ], Response::HTTP_FORBIDDEN);
@@ -189,9 +216,8 @@ class CompanyController extends Controller
             }
 
             $user = Auth::user();
-            $role = $user->role;
 
-            if (!($role && $role->slug === 'super-admin') && $user->company_id !== $company->id) {
+            if (!$user->hasRole('super-admin') && $user->company_id !== $company->id) {
                 return response()->json([
                     'message' => 'Unauthorized to view this company'
                 ], Response::HTTP_FORBIDDEN);
@@ -224,9 +250,8 @@ class CompanyController extends Controller
             }
 
             $user = Auth::user();
-            $role = $user->role;
 
-            if (!($role && $role->slug === 'super-admin') && $user->company_id !== $company->id) {
+            if (!$user->hasRole('super-admin') && $user->company_id !== $company->id) {
                 return response()->json([
                     'message' => 'Unauthorized to view this company'
                 ], Response::HTTP_FORBIDDEN);
