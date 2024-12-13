@@ -4,10 +4,15 @@ namespace Database\Seeders;
 
 use App\Models\Auth\User;
 use Database\Seeders\RoleSeeder;
-use Database\Seeders\MasterTablesSeeder;
-use Database\Seeders\CompanySeeder;
-use Database\Seeders\BranchSeeder;
 use Database\Seeders\UserSeeder;
+use Database\Seeders\CompanySeeder;
+use Database\Seeders\DocumentStateSeeder;
+use Database\Seeders\DocumentTemplateSeeder;
+use Database\Seeders\ApprovalFlowSeeder;
+use Database\Seeders\RecurringDocumentSeeder;
+use Database\Seeders\BranchSeeder;
+use Database\Seeders\MasterDataSeeder;
+use Database\Seeders\CustomerSeeder;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -17,12 +22,18 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // Seeders base del sistema (en orden correcto)
         $this->call([
             RoleSeeder::class,
-            MasterTablesSeeder::class,
-            CompanySeeder::class,
-            BranchSeeder::class,
-            UserSeeder::class,
+            MasterDataSeeder::class,  // Datos maestros primero
+            CompanySeeder::class,     // Luego empresas
+            BranchSeeder::class,      // Después sucursales
+            UserSeeder::class,        // Finalmente usuarios
+            DocumentStateSeeder::class,
+            DocumentTemplateSeeder::class,
+            CustomerSeeder::class,
+            ApprovalFlowSeeder::class,
+            RecurringDocumentSeeder::class,
         ]);
 
         // Then create the test user with super-admin role

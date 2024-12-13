@@ -1,0 +1,87 @@
+# Funcionalidades Pendientes - Fase 1 API REST
+
+## 1. Gestión de Productos y Servicios
+✅ Gestión de inventario
+✅ Histórico de precios
+✅ Impuestos por producto
+✅ Categorías y subcategorías más detalladas
+✅ Unidades de medida compuestas
+
+## 2. Gestión de Clientes y Proveedores
+✅ Gestión de créditos y límites de crédito
+✅ Términos de pago personalizados
+✅ Historial de transacciones
+✅ Clasificación de clientes/proveedores
+✅ Documentos adjuntos (RUT, cámara de comercio, etc.)
+
+## 3. Documentos Comerciales
+✅ Estados más detallados de documentos
+✅ Flujo de aprobación configurable
+✅ Conversión entre tipos de documentos
+✅ Documentos recurrentes
+✅ Plantillas personalizables
+✅ Adjuntos y documentos relacionados
+✅ Historial de cambios
+
+## 4. Configuración Fiscal
+- Reglas de impuestos más complejas
+- Retenciones automáticas
+- Configuración de IVA por región
+- Calendarios fiscales
+- Reportes fiscales
+
+## 5. Numeración y Resoluciones
+- Gestión completa de resoluciones DIAN
+- Prefijos personalizados
+- Control de consecutivos por tipo de documento
+- Alertas de vencimiento de resoluciones
+- Validación de rangos
+
+## 6. Pagos y Cartera
+- Múltiples formas de pago por transacción
+- Gestión de anticipos
+- Conciliación bancaria
+- Cartera por edades
+- Recordatorios de pago
+- Planes de pago
+
+## 7. Reportes y Análisis
+- Dashboard financiero
+- Reportes de ventas
+- Análisis de cartera
+- Reportes de impuestos
+- Exportación en múltiples formatos
+- Reportes personalizables
+
+## 8. Seguridad y Auditoría
+- Logs de auditoría detallados
+- Control de acceso más granular
+- Políticas de contraseñas
+- Autenticación de dos factores
+- Límites de sesiones
+- Registro de actividades
+
+## 9. Integración y API
+- Documentación API completa (Swagger/OpenAPI)
+- Versionamiento de API
+- Rate limiting
+- Webhooks para eventos
+- Batch operations
+- Caché y optimización
+
+## 10. Configuración del Sistema
+- Configuración de correos
+- Plantillas de correo
+- Configuración de notificaciones
+- Respaldos automáticos
+- Personalización de campos
+- Configuración de workflow
+
+## 11. Validaciones y Reglas de Negocio
+- Validaciones más robustas de documentos
+- Reglas de negocio configurables
+- Validaciones específicas por tipo de cliente
+- Restricciones por monto o cantidad
+- Flujos de aprobación personalizables
+
+Nota: Este documento lista las funcionalidades pendientes para la Fase 1 (API REST) del proyecto, sin incluir la integración con la DIAN (Fase 2).

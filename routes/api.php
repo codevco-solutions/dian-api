@@ -35,6 +35,20 @@ use App\Http\Controllers\API\Document\Commercial\InvoiceController;
 use App\Http\Controllers\API\Document\Commercial\CreditNoteController;
 use App\Http\Controllers\API\Document\Commercial\DebitNoteController;
 use App\Http\Controllers\API\Document\Commercial\PaymentReceiptController;
+use App\Http\Controllers\API\Product\ProductInventoryController;
+use App\Http\Controllers\API\Product\PriceHistoryController;
+use App\Http\Controllers\API\Product\ProductTaxController;
+use App\Http\Controllers\API\Category\CategoryController;
+use App\Http\Controllers\API\Credit\CreditController;
+use App\Http\Controllers\API\Customer\PaymentTermController;
+use App\Http\Controllers\API\Customer\CustomerClassificationController;
+use App\Http\Controllers\API\Customer\TransactionHistoryController;
+use App\Http\Controllers\API\Customer\CustomerDocumentController;
+use App\Http\Controllers\API\Document\DocumentStateController;
+use App\Http\Controllers\API\Document\DocumentTemplateController;
+use App\Http\Controllers\API\Document\DocumentAttachmentController;
+use App\Http\Controllers\API\Document\DocumentConversionController;
+use App\Http\Controllers\API\Document\DocumentChangeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -209,13 +223,19 @@ Route::middleware(['auth:sanctum'])->group(function () {
         });
 
         // Measurement Units
-        Route::controller(MeasurementUnitController::class)->group(function () {
-            Route::get('measurement-units', 'index');
-            Route::post('measurement-units', 'store');
-            Route::get('measurement-units/{id}', 'show');
-            Route::put('measurement-units/{id}', 'update');
-            Route::delete('measurement-units/{id}', 'destroy');
-            Route::get('measurement-units/active', 'active');
+        Route::prefix('measurement-units')->group(function () {
+            Route::get('base', [MeasurementUnitController::class, 'getBaseUnits']);
+            Route::get('composite', [MeasurementUnitController::class, 'getCompositeUnits']);
+            Route::post('composite', [MeasurementUnitController::class, 'createCompositeUnit']);
+            Route::put('composite/{unit}', [MeasurementUnitController::class, 'updateCompositeUnit']);
+            Route::post('conversions', [MeasurementUnitController::class, 'addUnitConversion']);
+            Route::put('conversions/{conversion}', [MeasurementUnitController::class, 'updateUnitConversion']);
+            Route::delete('conversions/{conversion}', [MeasurementUnitController::class, 'removeUnitConversion']);
+            Route::post('convert', [MeasurementUnitController::class, 'convertValue']);
+            Route::get('{unit}/conversions', [MeasurementUnitController::class, 'getUnitConversions']);
+            Route::get('{unit}/components', [MeasurementUnitController::class, 'getUnitComponents']);
+            Route::post('{unit}/calculate', [MeasurementUnitController::class, 'calculateCompositeValue']);
+            Route::post('validate-conversion', [MeasurementUnitController::class, 'validateConversion']);
         });
 
         // Taxes
@@ -298,6 +318,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
             Route::get('price-lists/active', 'active');
         });
 
+        // Price History
+        Route::prefix('price-history')->group(function () {
+            Route::get('products/{product}', [PriceHistoryController::class, 'getProductHistory']);
+            Route::post('price-lists/{priceList}', [PriceHistoryController::class, 'recordPriceChange']);
+            Route::get('price-lists/{priceList}/evolution', [PriceHistoryController::class, 'getPriceEvolution']);
+            Route::get('price-lists/{priceList}/trends', [PriceHistoryController::class, 'getPriceTrends']);
+        });
+
         // Customers
         Route::controller(CustomerController::class)->group(function () {
             Route::get('customers', 'index');
@@ -335,6 +363,164 @@ Route::middleware(['auth:sanctum'])->group(function () {
             Route::put('{type}/{id}/contacts/{contactId}', 'update');
             Route::delete('{type}/{id}/contacts/{contactId}', 'destroy');
         });
+    });
+
+    // Category Routes
+    Route::prefix('categories')->group(function () {
+        Route::post('/', [CategoryController::class, 'store']);
+        Route::put('{category}', [CategoryController::class, 'update']);
+        Route::delete('{category}', [CategoryController::class, 'destroy']);
+        Route::get('{category}/hierarchy', [CategoryController::class, 'getHierarchy']);
+        Route::get('{category}/attributes', [CategoryController::class, 'getAttributes']);
+        Route::post('{category}/attributes', [CategoryController::class, 'addAttribute']);
+        Route::put('{category}/attributes/{attribute}', [CategoryController::class, 'updateAttribute']);
+        Route::delete('{category}/attributes/{attribute}', [CategoryController::class, 'removeAttribute']);
+        Route::get('{category}/products', [CategoryController::class, 'getProducts']);
+        Route::get('{category}/products/{product}/attributes', [CategoryController::class, 'getProductAttributes']);
+        Route::post('{category}/products/{product}/attributes', [CategoryController::class, 'setProductAttributes']);
+        Route::post('{category}/move', [CategoryController::class, 'moveCategory']);
+        Route::post('{category}/reorder', [CategoryController::class, 'reorderCategories']);
+        Route::get('tree', [CategoryController::class, 'getCategoryTree']);
+        Route::get('{category}/validate', [CategoryController::class, 'validateStructure']);
+    });
+
+    // Product Tax Routes
+    Route::prefix('products/{product}/taxes')->group(function () {
+        Route::get('/', [ProductTaxController::class, 'getProductTaxes']);
+        Route::post('/', [ProductTaxController::class, 'assignTax']);
+        Route::put('{tax}', [ProductTaxController::class, 'updateTax']);
+        Route::delete('{tax}', [ProductTaxController::class, 'removeTax']);
+        Route::get('history', [ProductTaxController::class, 'getTaxHistory']);
+        Route::post('calculate', [ProductTaxController::class, 'calculateTaxes']);
+        Route::get('summary', [ProductTaxController::class, 'getTaxSummary']);
+    });
+
+    // Product Inventory Routes
+    Route::prefix('products/{product}/inventory')->group(function () {
+        Route::get('branches/{branch}', [ProductInventoryController::class, 'getInventory']);
+        Route::put('branches/{branch}/stock', [ProductInventoryController::class, 'updateStock']);
+        Route::post('branches/{branch}/add', [ProductInventoryController::class, 'addStock']);
+        Route::post('branches/{branch}/remove', [ProductInventoryController::class, 'removeStock']);
+        Route::post('transfer', [ProductInventoryController::class, 'transferStock']);
+        Route::get('branches/{branch}/movements', [ProductInventoryController::class, 'getMovements']);
+    });
+
+    Route::get('branches/{branch}/stock-alerts', [ProductInventoryController::class, 'getStockAlerts']);
+
+    // Customer Credit Routes
+    Route::prefix('customers/{customer}/credit')->group(function () {
+        Route::get('/', [CreditController::class, 'getCustomerCredit']);
+        Route::put('limit', [CreditController::class, 'updateCreditLimit']);
+        Route::post('movements', [CreditController::class, 'addCreditMovement']);
+        Route::get('movements', [CreditController::class, 'getCreditMovements']);
+        Route::get('status', [CreditController::class, 'getCreditStatus']);
+        Route::get('overdue', [CreditController::class, 'getOverduePayments']);
+        Route::get('metrics', [CreditController::class, 'getCreditMetrics']);
+        Route::get('risk', [CreditController::class, 'evaluateCreditRisk']);
+        Route::get('report', [CreditController::class, 'generateCreditReport']);
+    });
+
+    Route::put('credit-movements/{movement}/status', [CreditController::class, 'updatePaymentStatus']);
+
+    // Customer Payment Terms Routes
+    Route::prefix('customers/{customer}/payment-terms')->group(function () {
+        Route::get('/', [PaymentTermController::class, 'index']);
+        Route::post('/', [PaymentTermController::class, 'store']);
+        Route::put('{term}', [PaymentTermController::class, 'update']);
+        Route::delete('{term}', [PaymentTermController::class, 'destroy']);
+        Route::put('{term}/default', [PaymentTermController::class, 'setDefault']);
+        Route::post('{term}/calculate-discount', [PaymentTermController::class, 'calculateDiscount']);
+    });
+
+    // Customer Classifications Routes
+    Route::prefix('customer-classifications')->group(function () {
+        Route::get('/', [CustomerClassificationController::class, 'index']);
+        Route::post('/', [CustomerClassificationController::class, 'store']);
+        Route::put('{classification}', [CustomerClassificationController::class, 'update']);
+        Route::delete('{classification}', [CustomerClassificationController::class, 'destroy']);
+        Route::get('{classification}/metrics', [CustomerClassificationController::class, 'getMetrics']);
+        Route::post('evaluate-all', [CustomerClassificationController::class, 'evaluateAllCustomers']);
+    });
+
+    Route::prefix('customers/{customer}')->group(function () {
+        Route::post('classification', [CustomerClassificationController::class, 'assignToCustomer']);
+        Route::post('evaluate-classification', [CustomerClassificationController::class, 'evaluateCustomer']);
+    });
+
+    // Customer Transaction History Routes
+    Route::prefix('customers/{customer}/transactions')->group(function () {
+        Route::get('/', [TransactionHistoryController::class, 'index']);
+        Route::post('/', [TransactionHistoryController::class, 'store']);
+        Route::get('summary', [TransactionHistoryController::class, 'getSummary']);
+        Route::get('overdue', [TransactionHistoryController::class, 'getOverdue']);
+        Route::get('metrics', [TransactionHistoryController::class, 'getMetrics']);
+        Route::get('balance', [TransactionHistoryController::class, 'getCurrentBalance']);
+        Route::get('report', [TransactionHistoryController::class, 'generateReport']);
+    });
+
+    Route::put('transactions/{transaction}/status', [TransactionHistoryController::class, 'updateStatus']);
+
+    // Customer Documents Routes
+    Route::prefix('customers/{customer}/documents')->group(function () {
+        Route::get('/', [CustomerDocumentController::class, 'index']);
+        Route::post('/', [CustomerDocumentController::class, 'store']);
+        Route::put('{document}', [CustomerDocumentController::class, 'update']);
+        Route::post('{document}/file', [CustomerDocumentController::class, 'updateFile']);
+        Route::delete('{document}', [CustomerDocumentController::class, 'destroy']);
+        Route::get('type/{type}', [CustomerDocumentController::class, 'getByType']);
+        Route::get('expired', [CustomerDocumentController::class, 'getExpired']);
+        Route::get('about-to-expire', [CustomerDocumentController::class, 'getAboutToExpire']);
+        Route::get('missing-required', [CustomerDocumentController::class, 'getMissingRequired']);
+        Route::get('status', [CustomerDocumentController::class, 'checkStatus']);
+        Route::get('report', [CustomerDocumentController::class, 'generateReport']);
+    });
+
+    // Document States
+    Route::prefix('documents/states')->group(function () {
+        Route::get('/', [DocumentStateController::class, 'index']);
+        Route::post('/', [DocumentStateController::class, 'store']);
+        Route::put('/{id}', [DocumentStateController::class, 'update']);
+        Route::delete('/{id}', [DocumentStateController::class, 'destroy']);
+        Route::get('/type/{documentType}', [DocumentStateController::class, 'getAvailableStates']);
+        Route::get('/{stateId}/transitions', [DocumentStateController::class, 'getAvailableTransitions']);
+        Route::post('/transition', [DocumentStateController::class, 'transition']);
+    });
+
+    // Document Templates
+    Route::prefix('documents/templates')->group(function () {
+        Route::get('/', [DocumentTemplateController::class, 'index']);
+        Route::post('/', [DocumentTemplateController::class, 'store']);
+        Route::put('/{id}', [DocumentTemplateController::class, 'update']);
+        Route::delete('/{id}', [DocumentTemplateController::class, 'destroy']);
+        Route::get('/type/{documentType}/default', [DocumentTemplateController::class, 'getDefaultTemplate']);
+        Route::post('/{id}/default', [DocumentTemplateController::class, 'setDefaultTemplate']);
+        Route::post('/{id}/duplicate', [DocumentTemplateController::class, 'duplicate']);
+        Route::post('/{id}/validate', [DocumentTemplateController::class, 'validateData']);
+        Route::post('/{id}/toggle-active', [DocumentTemplateController::class, 'toggleActive']);
+    });
+
+    // Document Attachments
+    Route::prefix('documents/attachments')->group(function () {
+        Route::post('/upload', [DocumentAttachmentController::class, 'upload']);
+        Route::delete('/{id}', [DocumentAttachmentController::class, 'destroy']);
+        Route::get('/document/{documentType}/{documentId}', [DocumentAttachmentController::class, 'getDocumentAttachments']);
+        Route::put('/{id}/metadata', [DocumentAttachmentController::class, 'updateMetadata']);
+        Route::get('/document/{documentType}/{documentId}/by-type', [DocumentAttachmentController::class, 'getByFileType']);
+        Route::get('/user/{userId}', [DocumentAttachmentController::class, 'getByUser']);
+    });
+
+    // Document Conversion Routes
+    Route::prefix('documents')->group(function () {
+        Route::post('{sourceType}/{documentId}/convert', [DocumentConversionController::class, 'convert']);
+        Route::get('{sourceType}/{documentId}/allowed-conversions', [DocumentConversionController::class, 'getAllowedConversions']);
+        Route::get('{sourceType}/{documentId}/related-conversions', [DocumentConversionController::class, 'getRelatedConversions']);
+    });
+
+    // Document Change History Routes
+    Route::prefix('documents')->group(function () {
+        Route::get('{documentType}/{documentId}/history', [DocumentChangeController::class, 'getHistory']);
+        Route::get('changes/{changeId}', [DocumentChangeController::class, 'getChangeDetails']);
+        Route::get('{documentType}/{documentId}/changes-summary', [DocumentChangeController::class, 'getChangeSummary']);
     });
 
     // Document Commercial Routes
