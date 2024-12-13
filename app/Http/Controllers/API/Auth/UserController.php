@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\API\User;
+namespace App\Http\Controllers\API\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\User\UserResource;
-use App\Services\User\UserService;
+use App\Services\Auth\UserService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -26,13 +26,29 @@ class UserController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $role = $user->role;
+        $role = $user->roles->first();  // Cambio aquí para obtener el primer rol
         
-        if ($role && $role->slug === 'super-admin') {
+        if (!$role) {
+            return response()->json([
+                'message' => 'User has no role assigned'
+            ], Response::HTTP_FORBIDDEN);
+        }
+
+        if ($role->name === 'super-admin') {
             $users = $this->userService->getAll();
-        } elseif ($role && $role->slug === 'company-admin') {
+        } elseif ($role->name === 'company-admin') {
+            if (!$user->company_id) {
+                return response()->json([
+                    'message' => 'Company admin has no company assigned'
+                ], Response::HTTP_FORBIDDEN);
+            }
             $users = $this->userService->getAllByCompany($user->company_id);
         } else {
+            if (!$user->branch_id) {
+                return response()->json([
+                    'message' => 'User has no branch assigned'
+                ], Response::HTTP_FORBIDDEN);
+            }
             $users = $this->userService->getAllByBranch($user->branch_id);
         }
 
@@ -48,17 +64,17 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $user = Auth::user();
-        $role = $user->role;
+        $role = $user->roles->first();
 
         // Validar que el usuario tenga permisos para crear usuarios
-        if (!($role && ($role->slug === 'super-admin' || $role->slug === 'company-admin'))) {
+        if (!$role || !in_array($role->name, ['super-admin', 'company-admin'])) {
             return response()->json([
                 'message' => 'Unauthorized to create users'
             ], Response::HTTP_FORBIDDEN);
         }
 
         // Si es admin de compañía, solo puede crear usuarios para su compañía
-        if ($role->slug === 'company-admin' && $request->company_id != $user->company_id) {
+        if ($role->name === 'company-admin' && $request->company_id != $user->company_id) {
             return response()->json([
                 'message' => 'Unauthorized to create users for other companies'
             ], Response::HTTP_FORBIDDEN);
@@ -100,7 +116,7 @@ class UserController extends Controller
             $user = $this->userService->find($id);
             
             $authUser = Auth::user();
-            $role = $authUser->role;
+            $role = $authUser->roles->first();
 
             // Verificar permisos
             if (!$role) {
@@ -109,9 +125,9 @@ class UserController extends Controller
                 ], Response::HTTP_FORBIDDEN);
             }
 
-            if ($role->slug === 'super-admin') {
+            if ($role->name === 'super-admin') {
                 // Super admin puede ver cualquier usuario
-            } elseif ($role->slug === 'company-admin') {
+            } elseif ($role->name === 'company-admin') {
                 // Admin de compañía solo puede ver usuarios de su compañía
                 if ($user->company_id !== $authUser->company_id) {
                     return response()->json([
@@ -147,7 +163,7 @@ class UserController extends Controller
             $userToUpdate = $this->userService->find($id);
             
             $authUser = Auth::user();
-            $role = $authUser->role;
+            $role = $authUser->roles->first();
 
             // Verificar permisos
             if (!$role) {
@@ -156,9 +172,9 @@ class UserController extends Controller
                 ], Response::HTTP_FORBIDDEN);
             }
 
-            if ($role->slug === 'super-admin') {
+            if ($role->name === 'super-admin') {
                 // Super admin puede actualizar cualquier usuario
-            } elseif ($role->slug === 'company-admin') {
+            } elseif ($role->name === 'company-admin') {
                 // Admin de compañía solo puede actualizar usuarios de su compañía
                 if ($userToUpdate->company_id !== $authUser->company_id) {
                     return response()->json([
@@ -215,27 +231,18 @@ class UserController extends Controller
             $userToDelete = $this->userService->find($id);
             
             $authUser = Auth::user();
-            $role = $authUser->role;
+            $role = $authUser->roles->first();
 
             // Verificar permisos
             if (!$role) {
                 return response()->json([
-                    'message' => 'Unauthorized to delete user'
+                    'message' => 'Unauthorized to delete users'
                 ], Response::HTTP_FORBIDDEN);
             }
 
-            if ($role->slug === 'super-admin') {
-                // Super admin puede eliminar cualquier usuario
-            } elseif ($role->slug === 'company-admin') {
-                // Admin de compañía solo puede eliminar usuarios de su compañía
-                if ($userToDelete->company_id !== $authUser->company_id) {
-                    return response()->json([
-                        'message' => 'Unauthorized to delete this user'
-                    ], Response::HTTP_FORBIDDEN);
-                }
-            } else {
+            if ($role->name === 'company-admin' && $userToDelete->company_id !== $authUser->company_id) {
                 return response()->json([
-                    'message' => 'Unauthorized to delete users'
+                    'message' => 'Unauthorized to delete this user'
                 ], Response::HTTP_FORBIDDEN);
             }
 
@@ -243,7 +250,7 @@ class UserController extends Controller
 
             return response()->json([
                 'message' => 'User deleted successfully'
-            ], Response::HTTP_OK);
+            ]);
         } catch (ModelNotFoundException $e) {
             return response()->json([
                 'message' => 'User not found'
@@ -256,15 +263,6 @@ class UserController extends Controller
      */
     public function getByCompany(string $companyId)
     {
-        $user = Auth::user();
-        $role = $user->role;
-        
-        if (!($role && ($role->slug === 'super-admin' || ($role->slug === 'company-admin' && $user->company_id == $companyId)))) {
-            return response()->json([
-                'message' => 'Unauthorized to view users for this company'
-            ], Response::HTTP_FORBIDDEN);
-        }
-
         $users = $this->userService->getAllByCompany($companyId);
 
         return response()->json([
@@ -278,15 +276,6 @@ class UserController extends Controller
      */
     public function getByBranch(string $branchId)
     {
-        $user = Auth::user();
-        $role = $user->role;
-        
-        if (!($role && ($role->slug === 'super-admin' || $role->slug === 'company-admin'))) {
-            return response()->json([
-                'message' => 'Unauthorized to view users for this branch'
-            ], Response::HTTP_FORBIDDEN);
-        }
-
         $users = $this->userService->getAllByBranch($branchId);
 
         return response()->json([

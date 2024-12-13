@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Spatie\Permission\Traits\HasRoles;
 
 class CompanyController extends Controller
@@ -53,9 +54,29 @@ class CompanyController extends Controller
         if ($user->hasRole('super-admin')) {
             $companies = $this->companyService->getAll($perPage, $filters, $orderBy);
         } else {
-            // Si no es super admin, solo obtiene su propia compañía
+            // Si no es super admin, verificar si tiene una compañía asignada
+            if (!$user->company_id) {
+                return response()->json([
+                    'message' => 'No company assigned to this user',
+                    'data' => []
+                ]);
+            }
+            
             $company = $this->companyService->find($user->company_id);
-            $companies = collect([$company])->paginate($perPage);
+            if (!$company) {
+                return response()->json([
+                    'message' => 'Company not found',
+                    'data' => []
+                ], 404);
+            }
+            
+            // Crear una colección paginada con la única compañía
+            $companies = new \Illuminate\Pagination\LengthAwarePaginator(
+                [$company],
+                1,
+                $perPage,
+                1
+            );
         }
 
         // Cargar la relación de sucursales
@@ -139,18 +160,21 @@ class CompanyController extends Controller
                 ], Response::HTTP_FORBIDDEN);
             }
 
-            // Si llegamos aquí, la empresa existe, ahora validamos los datos
-            $validator = validator($request->all(), [
-                'business_name' => 'sometimes|required|string|max:255',
-                'trade_name' => 'sometimes|required|string|max:255',
-                'tax_id' => 'sometimes|required|string|max:20|unique:companies,tax_id,' . $id,
-                'tax_regime' => 'sometimes|required|string|max:50',
-                'economic_activity' => 'sometimes|required|string|max:255',
-                'address' => 'sometimes|required|string|max:255',
-                'phone' => 'sometimes|required|string|max:20',
-                'email' => 'sometimes|required|email|max:255|unique:companies,email,' . $id,
+            // Validamos los datos
+            $validator = Validator::make($request->all(), [
+                'name' => 'sometimes|string|max:255',
+                'commercial_name' => 'sometimes|string|max:255',
+                'identification_type_id' => 'sometimes|exists:identification_types,id',
+                'identification_number' => 'sometimes|string|max:20|unique:companies,identification_number,' . $id,
+                'verification_code' => 'sometimes|string|max:1',
+                'organization_type_id' => 'sometimes|exists:organization_types,id',
+                'tax_regime_id' => 'sometimes|exists:tax_regimes,id',
+                'email' => 'sometimes|email|max:255|unique:companies,email,' . $id,
+                'phone' => 'sometimes|string|max:20',
+                'address' => 'sometimes|string|max:255',
                 'website' => 'sometimes|nullable|url|max:255',
-                'subdomain' => 'sometimes|required|string|max:50|unique:companies,subdomain,' . $id,
+                'subdomain' => 'sometimes|string|max:63|unique:companies,subdomain,' . $id,
+                'is_active' => 'sometimes|boolean',
             ]);
 
             if ($validator->fails()) {

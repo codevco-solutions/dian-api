@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Http\Controllers\Document\Commercial;
+namespace App\Http\Controllers\API\Document\Commercial;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Document\Commercial\QuoteResource;
-use App\Models\Document\Commercial\Quote;
-use App\Services\Document\Commercial\QuoteService;
+use App\Http\Resources\Document\Commercial\OrderResource;
+use App\Http\Resources\Document\Commercial\InvoiceResource;
+use App\Services\Document\Commercial\OrderService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 
-class QuoteController extends Controller
+class OrderController extends Controller
 {
     protected $service;
 
-    public function __construct(QuoteService $service)
+    public function __construct(OrderService $service)
     {
         $this->service = $service;
     }
@@ -22,8 +22,8 @@ class QuoteController extends Controller
     public function index(Request $request)
     {
         try {
-            $quotes = $this->service->all($request);
-            return QuoteResource::collection($quotes);
+            $orders = $this->service->all($request->all());
+            return OrderResource::collection($orders);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
@@ -35,114 +35,119 @@ class QuoteController extends Controller
             $validated = $request->validate([
                 'company_id' => 'required|exists:companies,id',
                 'branch_id' => 'required|exists:branches,id',
-                'customer_id' => 'required|exists:customers,id',
+                'partner_type' => 'required|string',
+                'partner_id' => 'required|integer',
+                'type' => 'required|string',
+                'quote_id' => 'nullable|exists:quotes,id',
                 'date' => 'required|date',
-                'expiration_date' => 'required|date|after:date',
+                'delivery_date' => 'required|date|after:date',
                 'currency_code' => 'required|string|size:3',
                 'exchange_rate' => 'required|numeric|min:0',
                 'notes' => 'nullable|string',
                 'items' => 'required|array|min:1',
+                'items.*.quote_item_id' => 'nullable|exists:quote_items,id',
                 'items.*.product_id' => 'required|exists:products,id',
                 'items.*.quantity' => 'required|numeric|min:0',
                 'items.*.unit_price' => 'required|numeric|min:0',
                 'items.*.discount_rate' => 'nullable|numeric|min:0|max:100'
             ]);
 
-            $quote = $this->service->create($validated);
-            return new QuoteResource($quote->load(['items']));
+            $order = $this->service->create($validated);
+            return new OrderResource($order);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 
-    public function show(Quote $quote)
+    public function show(Order $order)
     {
         try {
-            return new QuoteResource($quote->load([
-                'company', 'branch', 'customer', 'items', 'logs'
+            return new OrderResource($order->load([
+                'company', 'branch', 'partner', 'quote', 'items', 'logs'
             ]));
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 
-    public function update(Request $request, Quote $quote)
+    public function update(Request $request, Order $order)
     {
         try {
             $validated = $request->validate([
                 'date' => 'date',
-                'expiration_date' => 'date|after:date',
+                'delivery_date' => 'date|after:date',
                 'currency_code' => 'string|size:3',
                 'exchange_rate' => 'numeric|min:0',
                 'notes' => 'nullable|string',
                 'items' => 'array|min:1',
-                'items.*.id' => 'nullable|exists:quote_items,id',
+                'items.*.id' => 'nullable|exists:order_items,id',
+                'items.*.quote_item_id' => 'nullable|exists:quote_items,id',
                 'items.*.product_id' => 'required|exists:products,id',
                 'items.*.quantity' => 'required|numeric|min:0',
                 'items.*.unit_price' => 'required|numeric|min:0',
                 'items.*.discount_rate' => 'nullable|numeric|min:0|max:100'
             ]);
 
-            $quote = $this->service->update($quote->id, $validated);
-            return new QuoteResource($quote->load(['items']));
+            $order = $this->service->update($order->id, $validated);
+            return new OrderResource($order);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 
-    public function destroy(Quote $quote)
+    public function destroy(Order $order)
     {
         try {
-            $this->service->delete($quote->id);
+            $this->service->delete($order->id);
             return response()->json(null, 204);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 
-    public function approve(Quote $quote)
+    public function approve(Order $order)
     {
         try {
-            $quote = $this->service->approve($quote->id);
-            return new QuoteResource($quote->load(['items']));
+            $order = $this->service->approve($order->id);
+            return new OrderResource($order);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 
-    public function reject(Quote $quote, Request $request)
+    public function reject(Request $request, Order $order)
     {
         try {
             $validated = $request->validate([
                 'rejection_reason' => 'required|string'
             ]);
 
-            $quote = $this->service->reject($quote->id, $validated['rejection_reason']);
-            return new QuoteResource($quote->load(['items']));
+            $order = $this->service->reject($order->id, $validated['rejection_reason']);
+            return new OrderResource($order);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 
-    public function cancel(Quote $quote, Request $request)
+    public function cancel(Order $order, Request $request)
     {
         try {
             $validated = $request->validate([
                 'cancellation_reason' => 'required|string'
             ]);
 
-            $quote = $this->service->cancel($quote->id, $validated['cancellation_reason']);
-            return new QuoteResource($quote->load(['items']));
+            $order = $this->service->cancel($order->id, $validated['cancellation_reason']);
+            return new OrderResource($order);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 
-    public function createOrder(Quote $quote)
+    public function createInvoice(Order $order)
     {
         try {
-            $order = $this->service->createOrder($quote->id);
-            return new OrderResource($order->load(['items']));
+            $invoice = $this->service->createInvoice($order->id);
+            return new InvoiceResource($invoice);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }

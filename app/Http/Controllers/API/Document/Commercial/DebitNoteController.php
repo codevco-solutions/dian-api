@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Document\Commercial;
+namespace App\Http\Controllers\API\Document\Commercial;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Document\Commercial\DebitNoteResource;

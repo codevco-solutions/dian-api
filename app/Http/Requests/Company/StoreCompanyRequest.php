@@ -16,14 +16,16 @@ class StoreCompanyRequest extends FormRequest
         $companyId = $this->route('company');
         
         return [
-            'business_name' => 'required|string|max:255',
-            'trade_name' => 'nullable|string|max:255',
-            'tax_id' => 'required|string|unique:companies,tax_id,' . $companyId,
-            'tax_regime' => 'required|string',
-            'economic_activity' => 'required|string',
-            'address' => 'required|string',
-            'phone' => 'required|string',
+            'name' => 'required|string|max:255',
+            'commercial_name' => 'nullable|string|max:255',
+            'identification_type_id' => 'required|exists:identification_types,id',
+            'identification_number' => 'required|string|unique:companies,identification_number,' . $companyId,
+            'verification_code' => 'nullable|string',
+            'organization_type_id' => 'required|exists:organization_types,id',
+            'tax_regime_id' => 'required|exists:tax_regimes,id',
             'email' => 'required|email|unique:companies,email,' . $companyId,
+            'phone' => 'nullable|string',
+            'address' => 'required|string',
             'website' => 'nullable|url',
             'subdomain' => [
                 'required',
@@ -37,9 +39,9 @@ class StoreCompanyRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'business_name.required' => 'El nombre de la empresa es requerido',
-            'tax_id.required' => 'El NIT es requerido',
-            'tax_id.unique' => 'El NIT ya está registrado',
+            'name.required' => 'El nombre de la empresa es requerido',
+            'identification_number.required' => 'El número de identificación es requerido',
+            'identification_number.unique' => 'El número de identificación ya está registrado',
             'email.required' => 'El correo electrónico es requerido',
             'email.email' => 'El correo electrónico debe ser válido',
             'email.unique' => 'El correo electrónico ya está registrado',

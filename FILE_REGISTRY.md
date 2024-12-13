@@ -251,6 +251,64 @@ database/migrations/
 - Se mantiene el patrón de diseño Repository
 - Se han agregado validaciones adicionales para mejorar la integridad de los datos
 
+## Historial de Cambios
+
+### 12 de Diciembre 2023 - Implementación de Arquitectura de Repositorios y Servicios
+
+#### Cambios Realizados
+1. **Reorganización de Modelos por Dominio**
+   - Modelos movidos a carpetas específicas por dominio (Auth, Company, Branch, etc.)
+   - Implementación de relaciones y propiedades en cada modelo
+   - Mejora en la organización y mantenibilidad del código
+
+2. **Implementación del Patrón Repositorio**
+   - Creación de interfaces en `app/Repositories/Contracts`
+   - Implementación de repositorios en `app/Repositories/Eloquent`
+   - Separación de la lógica de acceso a datos
+
+3. **Capa de Servicios**
+   - Implementación de servicios por dominio
+   - Encapsulamiento de la lógica de negocio
+   - Mejora en la reutilización de código
+
+4. **Migraciones y Seeders**
+   - Reorganización de migraciones por dominio
+   - Nuevos seeders para datos iniciales
+   - Mejora en la estructura de la base de datos
+
+5. **Recursos API**
+   - Nuevos recursos para transformación de datos
+   - Estandarización de respuestas API
+   - Mejora en la consistencia de datos
+
+6. **Documentación**
+   - Actualización de la colección Postman
+   - Documentación de la arquitectura
+   - Registro de cambios en FILE_REGISTRY.md
+
+#### Estructura Actual del Proyecto
+```
+app/
+├── Http/
+│   ├── Controllers/API/            # Controladores por dominio
+│   ├── Resources/                  # Recursos API
+│   └── Requests/                   # Validación de solicitudes
+├── Models/                         # Modelos organizados por dominio
+├── Repositories/
+│   ├── Contracts/                 # Interfaces de repositorios
+│   └── Eloquent/                  # Implementaciones de repositorios
+├── Services/                       # Servicios por dominio
+└── Providers/
+    └── RepositoryServiceProvider.php
+```
+
+#### Próximos Pasos
+1. Implementación de pruebas unitarias
+2. Documentación detallada de la API
+3. Implementación de caché
+4. Optimización de consultas
+5. Implementación de eventos y listeners
+
 ## Notas de Implementación
 - Se sigue el patrón Repository en todos los módulos
 - Implementación consistente de filtros y paginación

@@ -17,32 +17,7 @@ class CompanyService
 
     public function getAll($perPage = 15, array $filters = [], array $orderBy = ['created_at' => 'desc'])
     {
-        $query = Company::query();
-
-        // Apply filters
-        if (isset($filters['business_name'])) {
-            $query->where('business_name', 'like', '%' . $filters['business_name'] . '%');
-        }
-        if (isset($filters['commercial_name'])) {
-            $query->where('commercial_name', 'like', '%' . $filters['commercial_name'] . '%');
-        }
-        if (isset($filters['nit'])) {
-            $query->where('nit', 'like', '%' . $filters['nit'] . '%');
-        }
-        if (isset($filters['address'])) {
-            $query->where('address', 'like', '%' . $filters['address'] . '%');
-        }
-        if (isset($filters['is_active'])) {
-            $query->where('is_active', $filters['is_active']);
-        }
-
-        // Apply ordering
-        foreach ($orderBy as $column => $direction) {
-            $query->orderBy($column, $direction);
-        }
-
-        // Apply pagination
-        return $query->paginate($perPage);
+        return $this->repository->getAll($perPage, $filters, $orderBy);
     }
 
     public function find(int $id)
@@ -52,21 +27,39 @@ class CompanyService
 
     public function create(array $data)
     {
-        // Generate subdomain from business name if not provided
-        if (!isset($data['subdomain']) && isset($data['business_name'])) {
-            $data['subdomain'] = Str::slug($data['business_name']);
+        // Generate subdomain from name if not provided
+        if (!isset($data['subdomain']) && isset($data['name'])) {
+            $data['subdomain'] = Str::slug($data['name']);
         }
         
-        return $this->repository->create($data);
+        $company = $this->repository->create($data);
+        
+        // Create main branch
+        $this->createMainBranch($company);
+        
+        return $company;
     }
 
     public function update(int $id, array $data)
     {
+        $company = $this->repository->find($id);
+        
+        // Generate subdomain from name if name is provided and subdomain is not
+        if (!isset($data['subdomain']) && isset($data['name'])) {
+            $data['subdomain'] = Str::slug($data['name']);
+        }
+        
         return $this->repository->update($id, $data);
     }
 
     public function delete(int $id)
     {
+        $company = $this->repository->find($id);
+        
+        // Primero eliminamos todas las sucursales
+        $company->branches()->delete();
+        
+        // Luego eliminamos la compañía
         return $this->repository->delete($id);
     }
 
@@ -80,14 +73,19 @@ class CompanyService
         return $this->repository->findByTaxId($taxId);
     }
 
-    public function createMainBranch(Company $company)
+    public function createMainBranch($company)
     {
+        $branchCode = 'MAIN-' . uniqid();
+        
         return $company->branches()->create([
             'name' => 'Principal',
-            'code' => 'MAIN-' . $company->id,
+            'code' => $branchCode,
             'address' => $company->address,
             'phone' => $company->phone,
             'email' => $company->email,
+            'country_id' => 1,
+            'state_id' => 1,
+            'city_id' => 1,
             'is_main' => true,
         ]);
     }

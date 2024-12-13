@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories\Contracts\User;
+namespace App\Repositories\Contracts\Auth;
 
 use App\Repositories\Contracts\BaseRepositoryInterface;
 
@@ -13,6 +13,14 @@ interface UserRepositoryInterface extends BaseRepositoryInterface
      * @return mixed
      */
     public function findByEmail(string $email);
+
+    /**
+     * Get users by role
+     *
+     * @param int $roleId
+     * @return mixed
+     */
+    public function getAllByRole(int $roleId);
 
     /**
      * Get users by company
@@ -29,12 +37,4 @@ interface UserRepositoryInterface extends BaseRepositoryInterface
      * @return mixed
      */
     public function getAllByBranch(int $branchId);
-
-    /**
-     * Get users by role
-     *
-     * @param int $roleId
-     * @return mixed
-     */
-    public function getAllByRole(int $roleId);
 }

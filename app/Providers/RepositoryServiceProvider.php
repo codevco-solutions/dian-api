@@ -7,7 +7,7 @@ use Illuminate\Support\ServiceProvider;
 // Interfaces
 use App\Repositories\Contracts\Company\CompanyRepositoryInterface;
 use App\Repositories\Contracts\Branch\BranchRepositoryInterface;
-use App\Repositories\Contracts\User\UserRepositoryInterface;
+use App\Repositories\Contracts\Auth\UserRepositoryInterface;
 use App\Repositories\Contracts\MasterTable\MasterTableRepositoryInterface;
 use App\Repositories\Contracts\MasterTable\LocationRepositoryInterface;
 use App\Repositories\Contracts\Customer\CustomerRepositoryInterface;
@@ -71,7 +71,7 @@ use App\Repositories\Contracts\Document\Commercial\QuoteRepositoryInterface;
 // Repositories
 use App\Repositories\Eloquent\Company\CompanyRepository;
 use App\Repositories\Eloquent\Branch\BranchRepository;
-use App\Repositories\Eloquent\User\UserRepository;
+use App\Repositories\Eloquent\Auth\UserRepository;
 use App\Repositories\Eloquent\MasterTable\MasterTableRepository;
 use App\Repositories\Eloquent\MasterTable\LocationRepository;
 use App\Repositories\Eloquent\Customer\CustomerRepository;

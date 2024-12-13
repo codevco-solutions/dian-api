@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Services\User;
+namespace App\Services\Auth;
 
-use App\Repositories\Contracts\User\UserRepositoryInterface;
+use App\Repositories\Contracts\Auth\UserRepositoryInterface;
 use Illuminate\Support\Facades\Hash;
 
 class UserService
@@ -25,7 +25,7 @@ class UserService
     }
 
     /**
-     * Get user by ID
+     * Get user by id
      *
      * @param int $id
      * @return mixed
@@ -47,47 +47,14 @@ class UserService
     }
 
     /**
-     * Get users by company
-     *
-     * @param int $companyId
-     * @return mixed
-     */
-    public function getAllByCompany(int $companyId)
-    {
-        return $this->userRepository->getAllByCompany($companyId);
-    }
-
-    /**
-     * Get users by branch
-     *
-     * @param int $branchId
-     * @return mixed
-     */
-    public function getAllByBranch(int $branchId)
-    {
-        return $this->userRepository->getAllByBranch($branchId);
-    }
-
-    /**
-     * Get users by role
-     *
-     * @param int $roleId
-     * @return mixed
-     */
-    public function getAllByRole(int $roleId)
-    {
-        return $this->userRepository->getAllByRole($roleId);
-    }
-
-    /**
-     * Create new user
+     * Create user
      *
      * @param array $data
      * @return mixed
      */
     public function create(array $data)
     {
-        // Hash password if present
+        // Hash password
         if (isset($data['password'])) {
             $data['password'] = Hash::make($data['password']);
         }
@@ -121,5 +88,38 @@ class UserService
     public function delete(int $id): bool
     {
         return $this->userRepository->delete($id);
+    }
+
+    /**
+     * Get users by role
+     *
+     * @param int $roleId
+     * @return mixed
+     */
+    public function getAllByRole(int $roleId)
+    {
+        return $this->userRepository->getAllByRole($roleId);
+    }
+
+    /**
+     * Get users by company
+     *
+     * @param int $companyId
+     * @return mixed
+     */
+    public function getAllByCompany(int $companyId)
+    {
+        return $this->userRepository->getAllByCompany($companyId);
+    }
+
+    /**
+     * Get users by branch
+     *
+     * @param int $branchId
+     * @return mixed
+     */
+    public function getAllByBranch(int $branchId)
+    {
+        return $this->userRepository->getAllByBranch($branchId);
     }
 }

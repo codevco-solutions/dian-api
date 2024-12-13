@@ -2,7 +2,7 @@
 
 namespace App\Repositories\Eloquent\Company;
 
-use App\Models\Company;
+use App\Models\Company\Company;
 use App\Repositories\Contracts\Company\CompanyRepositoryInterface;
 use App\Repositories\Eloquent\BaseRepository;
 

@@ -3,9 +3,9 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\Auth\AuthController;
+use App\Http\Controllers\API\Auth\UserController;
 use App\Http\Controllers\API\Company\CompanyController;
 use App\Http\Controllers\API\Branch\BranchController;
-use App\Http\Controllers\API\User\UserController;
 use App\Http\Controllers\API\MasterTable\LocationController;
 use App\Http\Controllers\API\MasterTable\CurrencyController;
 use App\Http\Controllers\API\MasterTable\IdentificationTypeController;
@@ -27,13 +27,14 @@ use App\Http\Controllers\API\Product\ProductController;
 use App\Http\Controllers\API\Product\PriceListController;
 use App\Http\Controllers\API\Customer\CustomerController;
 use App\Http\Controllers\API\Supplier\SupplierController;
-use App\Http\Controllers\API\Address\AddressController;
-use App\Http\Controllers\API\Contact\ContactController;
+use App\Http\Controllers\API\Common\AddressController;
+use App\Http\Controllers\API\Common\ContactController;
 use App\Http\Controllers\API\Document\Commercial\QuoteController;
 use App\Http\Controllers\API\Document\Commercial\OrderController;
 use App\Http\Controllers\API\Document\Commercial\InvoiceController;
 use App\Http\Controllers\API\Document\Commercial\CreditNoteController;
 use App\Http\Controllers\API\Document\Commercial\DebitNoteController;
+use App\Http\Controllers\API\Document\Commercial\PaymentReceiptController;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,16 +47,45 @@ use App\Http\Controllers\API\Document\Commercial\DebitNoteController;
 |
 */
 
-// Auth Routes
+// Rutas específicas para subdominios
+Route::domain('{subdomain}.dian-api.test')->group(function () {
+    Route::middleware(['auth:sanctum'])->group(function () {
+        Route::get('/', function ($subdomain) {
+            $company = App\Models\Company\Company::where('subdomain', $subdomain)->first();
+            if (!$company) {
+                return response()->json(['message' => 'Company not found'], 404);
+            }
+            return response()->json([
+                'message' => 'Company retrieved successfully',
+                'data' => new App\Http\Resources\Company\CompanyResource($company)
+            ]);
+        });
+    });
+});
+
+// Rutas de Autenticación
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
-// Protected Routes
+// Rutas Protegidas
 Route::middleware(['auth:sanctum'])->group(function () {
-    // Auth
+    // Información del usuario autenticado
+    Route::get('/me', [AuthController::class, 'me']);
     Route::post('/logout', [AuthController::class, 'logout']);
-    Route::get('/profile', [AuthController::class, 'profile']);
     
+    // Gestión de Usuarios
+    Route::prefix('users')->group(function () {
+        Route::get('/', [UserController::class, 'index']);
+        Route::post('/', [UserController::class, 'store']);
+        Route::get('/{id}', [UserController::class, 'show']);
+        Route::put('/{id}', [UserController::class, 'update']);
+        Route::delete('/{id}', [UserController::class, 'destroy']);
+    });
+    
+    // Usuarios por Compañía y Sucursal
+    Route::get('companies/{company}/users', [UserController::class, 'getByCompany']);
+    Route::get('branches/{branch}/users', [UserController::class, 'getByBranch']);
+
     // Companies
     Route::apiResource('companies', CompanyController::class);
     Route::get('companies/{company}/branches', [CompanyController::class, 'getBranches']);
@@ -66,11 +96,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('branches', BranchController::class);
     Route::get('companies/{company}/branches', [BranchController::class, 'getByCompany']);
     
-    // Users
-    Route::apiResource('users', UserController::class);
-    Route::get('companies/{company}/users', [UserController::class, 'getByCompany']);
-    Route::get('branches/{branch}/users', [UserController::class, 'getByBranch']);
-
     // Master Tables
     Route::prefix('master')->group(function () {
         // Locations
@@ -83,14 +108,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
             // States
             Route::get('states', [LocationController::class, 'indexStates']);
             Route::get('states/{id}', [LocationController::class, 'showState']);
-            Route::get('states/active', [LocationController::class, 'activeStates']);
             Route::get('countries/{country}/states', [LocationController::class, 'statesByCountry']);
+            Route::get('states/active', [LocationController::class, 'activeStates']);
 
             // Cities
             Route::get('cities', [LocationController::class, 'indexCities']);
             Route::get('cities/{id}', [LocationController::class, 'showCity']);
-            Route::get('cities/active', [LocationController::class, 'activeCities']);
             Route::get('states/{state}/cities', [LocationController::class, 'citiesByState']);
+            Route::get('cities/active', [LocationController::class, 'activeCities']);
         });
 
         // Currencies
@@ -344,5 +369,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::apiResource('debit-notes', DebitNoteController::class);
         Route::post('debit-notes/{debitNote}/approve', [DebitNoteController::class, 'approve']);
         Route::post('debit-notes/{debitNote}/cancel', [DebitNoteController::class, 'cancel']);
+
+        // Payment Receipts
+        Route::apiResource('payment-receipts', PaymentReceiptController::class);
+        Route::post('payment-receipts/{paymentReceipt}/approve', [PaymentReceiptController::class, 'approve']);
+        Route::post('payment-receipts/{paymentReceipt}/cancel', [PaymentReceiptController::class, 'cancel']);
     });
 });

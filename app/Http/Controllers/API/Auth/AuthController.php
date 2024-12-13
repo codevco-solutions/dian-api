@@ -56,11 +56,35 @@ class AuthController extends Controller
         ]);
     }
 
-    public function profile(Request $request)
+    public function me(Request $request)
     {
         $user = $request->user()->load(['roles', 'company', 'branch']);
 
-        return response()->json($user);
+        return response()->json([
+            'message' => 'User information retrieved successfully',
+            'data' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'phone' => $user->phone,
+                'is_active' => $user->is_active,
+                'settings' => $user->settings,
+                'roles' => $user->roles->map(function($role) {
+                    return [
+                        'id' => $role->id,
+                        'name' => $role->name
+                    ];
+                }),
+                'company' => $user->company ? [
+                    'id' => $user->company->id,
+                    'name' => $user->company->name
+                ] : null,
+                'branch' => $user->branch ? [
+                    'id' => $user->branch->id,
+                    'name' => $user->branch->name
+                ] : null
+            ]
+        ]);
     }
 
     public function register(RegisterRequest $request)

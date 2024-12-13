@@ -14,226 +14,184 @@ app/
 ├── Http/
 │   ├── Controllers/
 │   │   └── API/
-│   │       ├── Auth/                    # Controladores de autenticación
-│   │       │   └── AuthController.php
-│   │       ├── Company/                 # Controladores de compañías
-│   │       │   └── CompanyController.php
-│   │       ├── Branch/                  # Controladores de sucursales
-│   │       │   └── BranchController.php
-│   │       ├── User/                    # Controladores de usuarios
-│   │       │   └── UserController.php
-│   │       └── MasterTable/             # Controladores de tablas maestras
-│   │           ├── LocationController.php
-│   │           ├── CurrencyController.php
-│   │           ├── IdentificationTypeController.php
-│   │           ├── OrganizationTypeController.php
-│   │           ├── TaxRegimeController.php
-│   │           ├── TaxResponsibilityController.php
-│   │           ├── OperationTypeController.php
-│   │           ├── DocumentTypeController.php
-│   │           ├── PaymentMeansController.php
-│   │           ├── PaymentMethodController.php
-│   │           ├── MeasurementUnitController.php
-│   │           ├── TaxController.php
-│   │           ├── ReferencePriceController.php
-│   │           ├── DiscountTypeController.php
-│   │           ├── ChargeTypeController.php
-│   │           └── EventTypeController.php
+│   │       ├── Auth/                    # Autenticación y autorización
+│   │       ├── Common/                  # Componentes comunes (direcciones, contactos)
+│   │       ├── Company/                 # Gestión de empresas
+│   │       ├── Customer/                # Gestión de clientes
+│   │       ├── Document/                # Documentos electrónicos
+│   │       │   ├── Commercial/          # Facturas, notas crédito/débito
+│   │       │   └── Payroll/            # Nómina electrónica
+│   │       ├── Location/                # Países, estados, ciudades
+│   │       ├── MasterTable/             # Tablas maestras y configuración
+│   │       ├── Product/                 # Productos y listas de precios
+│   │       ├── Supplier/                # Gestión de proveedores
+│   │       └── User/                    # Gestión de usuarios
 │   │
 │   ├── Requests/                        # Validación de solicitudes
 │   │   ├── Auth/
+│   │   ├── Common/
 │   │   ├── Company/
-│   │   ├── Branch/
+│   │   ├── Customer/
+│   │   ├── Document/
+│   │   ├── Product/
+│   │   ├── Supplier/
 │   │   └── User/
 │   │
 │   └── Resources/                       # Transformación de respuestas
 │       ├── Auth/
+│       ├── Common/
 │       ├── Company/
-│       ├── Branch/
-│       ├── User/
-│       └── MasterTable/
+│       ├── Customer/
+│       ├── Document/
+│       │   ├── Commercial/
+│       │   └── Payroll/
+│       ├── MasterTable/
+│       ├── Product/
+│       ├── Supplier/
+│       └── User/
 │
-├── Services/                            # Lógica de negocio
-│   ├── Auth/
-│   ├── Company/
-│   ├── Branch/
-│   ├── User/
-│   └── MasterTable/
+├── Models/                              # Modelos por dominio
+│   ├── Auth/                           # Autenticación y roles
+│   ├── Branch/                         # Sucursales
+│   ├── Common/                         # Modelos comunes
+│   ├── Company/                        # Empresas
+│   ├── Customer/                       # Clientes
+│   ├── Document/                       # Documentos electrónicos
+│   │   ├── Commercial/                 # Documentos comerciales
+│   │   └── Payroll/                   # Documentos de nómina
+│   ├── Location/                       # Ubicaciones
+│   ├── MasterTable/                    # Tablas maestras
+│   ├── Product/                        # Productos
+│   └── Supplier/                       # Proveedores
 │
-├── Repositories/                        # Capa de acceso a datos
-│   ├── Contracts/                       # Interfaces
+├── Repositories/
+│   ├── Contracts/                      # Interfaces de repositorio
 │   │   ├── Auth/
+│   │   ├── Common/
 │   │   ├── Company/
-│   │   ├── Branch/
-│   │   ├── User/
-│   │   └── MasterTable/
+│   │   ├── Customer/
+│   │   ├── Document/
+│   │   ├── Location/
+│   │   ├── MasterTable/
+│   │   ├── Product/
+│   │   ├── Supplier/
+│   │   └── User/
 │   │
-│   └── Eloquent/                        # Implementaciones
+│   └── Eloquent/                       # Implementaciones
 │       ├── Auth/
+│       ├── Common/
 │       ├── Company/
-│       ├── Branch/
-│       ├── User/
-│       └── MasterTable/
+│       ├── Customer/
+│       ├── Document/
+│       ├── Location/
+│       ├── MasterTable/
+│       ├── Product/
+│       ├── Supplier/
+│       └── User/
 │
-└── Models/                              # Modelos Eloquent
-    ├── User.php
-    ├── Company.php
-    ├── Branch.php
-    └── MasterTable/                     # Modelos de tablas maestras
-        ├── Currency.php
-        ├── IdentificationType.php
-        ├── OrganizationType.php
-        ├── TaxRegime.php
-        ├── TaxResponsibility.php
-        ├── OperationType.php
-        ├── DocumentType.php
-        ├── PaymentMeans.php
-        ├── PaymentMethod.php
-        ├── MeasurementUnit.php
-        ├── Tax.php
-        ├── ReferencePrice.php
-        ├── DiscountType.php
-        ├── ChargeType.php
-        └── EventType.php
+└── Services/                           # Servicios por dominio
+    ├── Auth/
+    ├── Common/
+    ├── Company/
+    ├── Customer/
+    ├── Document/
+    │   ├── Commercial/
+    │   └── Payroll/
+    ├── Location/
+    ├── MasterTable/
+    ├── Product/
+    ├── Supplier/
+    └── User/
 ```
 
-## Módulos Principales
+## Dominios Principales
 
 ### Autenticación (Auth)
-- Registro de usuarios
-- Login/Logout
-- Gestión de perfiles
+- Gestión de usuarios y roles
+- Autenticación con Sanctum
+- Control de acceso basado en roles
 
-### Compañías (Companies)
-- CRUD de compañías
-- Búsqueda por subdominio y NIT
-- Gestión de sucursales asociadas
+### Empresas (Company)
+- Gestión de empresas y sucursales
+- Configuración por empresa
+- Multi-tenancy por subdominio
 
-### Sucursales (Branches)
-- CRUD de sucursales
-- Asociación con compañías
-- Gestión de usuarios por sucursal
+### Documentos Electrónicos (Document)
+#### Comerciales
+- Facturas electrónicas
+- Notas crédito/débito
+- Cotizaciones y órdenes
+- Recibos de pago
 
-### Usuarios (Users)
-- CRUD de usuarios
-- Asociación con compañías y sucursales
-- Gestión de roles y permisos
+#### Nómina
+- Documentos de nómina
+- Ajustes y deducciones
+- Períodos de nómina
+
+### Productos (Product)
+- Catálogo de productos
+- Categorías
+- Listas de precios
+
+### Clientes y Proveedores
+- Gestión de clientes
+- Gestión de proveedores
+- Contactos y direcciones
 
 ### Tablas Maestras (MasterTable)
-1. **Ubicaciones**
-   - Países
-   - Estados/Departamentos
-   - Ciudades/Municipios
+- Tipos de identificación
+- Tipos de organización
+- Regímenes tributarios
+- Responsabilidades tributarias
+- Tipos de operación
+- Medios de pago
+- Unidades de medida
+- Monedas y tributos
 
-2. **Identificación y Organización**
-   - Tipos de identificación
-   - Tipos de organización
-   - Regímenes tributarios
-   - Responsabilidades tributarias
+## Patrones y Principios
 
-3. **Operaciones y Documentos**
-   - Tipos de operación
-   - Tipos de documento
-   - Medios de pago
-   - Métodos de pago
+### Patrones de Diseño
+- Repository Pattern
+- Service Layer
+- Domain-Driven Design (DDD)
+- Factory Pattern
+- Observer Pattern (Eventos)
 
-4. **Medidas y Tributos**
-   - Unidades de medida
-   - Monedas
-   - Tributos
+### Principios SOLID
+- Single Responsibility
+- Open/Closed
+- Liskov Substitution
+- Interface Segregation
+- Dependency Inversion
 
-5. **Comercial**
-   - Tipos de referencia de precios
-   - Tipos de descuento
-   - Tipos de cargo
-   - Tipos de evento
+## Convenciones
 
-## Responsabilidades por Capa
+### Nomenclatura
+- Controllers: `{Domain}Controller`
+- Services: `{Domain}Service`
+- Repositories: `{Domain}Repository`
+- Models: Singular `{Domain}`
+- Interfaces: `{Domain}RepositoryInterface`
+- Resources: `{Domain}Resource`
 
-### Controllers
-- Recibir solicitudes HTTP
-- Validar datos de entrada usando Requests
-- Delegar lógica al Service
-- Devolver respuestas formateadas
+### Estándares API
+- RESTful endpoints
+- JSON responses
+- Autenticación con Bearer token
+- Validación de requests
+- Resources para transformación
+- API Resources para relaciones
+- Paginación estándar
+- Filtros dinámicos
+- Ordenamiento
+- Caché cuando sea apropiado
 
-### Requests
-- Definir reglas de validación
-- Personalizar mensajes de error
-- Autorización a nivel de solicitud
-
-### Services
-- Implementar lógica de negocio
-- Coordinar operaciones complejas
-- Manejar transacciones
-- Lanzar eventos
-
-### Repositories
-- Abstraer acceso a datos
-- Implementar consultas complejas
-- Centralizar lógica de persistencia
-- Permitir cambio de fuente de datos
-
-### Models
-- Definir estructura de datos
-- Establecer relaciones
-- Implementar scopes y mutators
-- Definir atributos y casting
-
-### Resources
-- Transformar datos para respuestas
-- Formatear relaciones
-- Controlar exposición de datos
-
-## Convenciones de Nombres
-
-- **Controladores**: `{Módulo}Controller`
-- **Servicios**: `{Módulo}Service`
-- **Repositorios**: `{Módulo}Repository`
-- **Modelos**: `{Módulo}` (singular)
-- **Requests**: `Store{Módulo}Request`, `Update{Módulo}Request`
-- **Resources**: `{Módulo}Resource`
-
-## Estándares de API
-
-### Endpoints
-- Base URL: `/api`
-- Versión: No versionado (implícito v1)
-- Formato: JSON
-- Autenticación: Bearer Token (Sanctum)
-
-### Respuestas
-- 200: Éxito
-- 201: Creado
-- 400: Error de validación
-- 401: No autorizado
-- 403: Prohibido
-- 404: No encontrado
-- 500: Error del servidor
-
-### Paginación
-```json
-{
-    "data": [],
-    "links": {
-        "first": "http://...",
-        "last": "http://...",
-        "prev": null,
-        "next": "http://..."
-    },
-    "meta": {
-        "current_page": 1,
-        "from": 1,
-        "last_page": 5,
-        "path": "http://...",
-        "per_page": 10,
-        "to": 10,
-        "total": 50
-    }
-}
-```
-
-### Filtros Comunes
-- `?search=término`
-- `?is_active=1`
-- `?sort=campo&order=desc`
-- `?page=1&per_page=10`
+## Seguridad
+- Autenticación con Sanctum
+- Roles y permisos (Spatie)
+- Validación de requests
+- Sanitización de datos
+- Rate limiting
+- CORS configurado
+- Headers de seguridad
+- Logs de auditoría

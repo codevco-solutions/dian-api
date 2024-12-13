@@ -45,4 +45,26 @@ abstract class BaseRepository implements BaseRepositoryInterface
     {
         return $this->find($id)->delete();
     }
+
+    public function getAll($perPage = 15, array $filters = [], array $orderBy = ['created_at' => 'desc'])
+    {
+        $query = $this->model->query();
+
+        // Apply filters
+        foreach ($filters as $field => $value) {
+            if (is_string($value)) {
+                $query->where($field, 'like', '%' . $value . '%');
+            } else {
+                $query->where($field, $value);
+            }
+        }
+
+        // Apply ordering
+        foreach ($orderBy as $column => $direction) {
+            $query->orderBy($column, $direction);
+        }
+
+        // Apply pagination
+        return $query->paginate($perPage);
+    }
 }
