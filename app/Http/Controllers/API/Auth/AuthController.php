@@ -92,6 +92,7 @@ class AuthController extends Controller
         $data = $request->validated();
         $data['password'] = bcrypt($data['password']);
         $data['is_active'] = true;
+        $data['settings'] = $data['settings'] ?? [];
 
         $user = User::create($data);
         
@@ -105,7 +106,7 @@ class AuthController extends Controller
         $user->load(['roles', 'company', 'branch']);
 
         return response()->json([
-            'token' => $token,
+            'access_token' => $token,
             'token_type' => 'Bearer',
             'message' => 'Usuario registrado exitosamente',
             'user' => $user

@@ -1,0 +1,376 @@
+{
+    "info": {
+        "_postman_id": "documents-collection",
+        "name": "04 - Documents Module",
+        "description": "Endpoints para la gestión de documentos comerciales",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Digital Certificates",
+            "item": [
+                {
+                    "name": "List Certificates",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/documents/certificates",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "documents", "certificates"]
+                        }
+                    }
+                },
+                {
+                    "name": "Upload Certificate",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "certificate",
+                                    "type": "file",
+                                    "src": "/path/to/certificate.p12"
+                                },
+                                {
+                                    "key": "password",
+                                    "value": "certificate_password",
+                                    "type": "text"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/documents/certificates",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "documents", "certificates"]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Templates",
+            "item": [
+                {
+                    "name": "List Templates",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/documents/templates",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "documents", "templates"]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Template",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"Factura Estándar\",\n    \"type\": \"invoice\",\n    \"content\": \"<template content>\",\n    \"is_default\": true\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/documents/templates",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "documents", "templates"]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Commercial Documents",
+            "item": [
+                {
+                    "name": "List Invoices",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/documents/commercial/invoices",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "documents", "commercial", "invoices"]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Invoice",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"customer_id\": 1,\n    \"branch_id\": 1,\n    \"date\": \"2024-01-19\",\n    \"due_date\": \"2024-02-19\",\n    \"currency\": \"COP\",\n    \"exchange_rate\": 1,\n    \"items\": [\n        {\n            \"product_id\": 1,\n            \"quantity\": 2,\n            \"price\": 100000,\n            \"discount\": 0,\n            \"tax_rate\": 19\n        }\n    ],\n    \"notes\": \"Observaciones de la factura\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/documents/commercial/invoices",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "documents", "commercial", "invoices"]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Invoice",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/documents/commercial/invoices/1",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "documents", "commercial", "invoices", "1"]
+                        }
+                    }
+                },
+                {
+                    "name": "Download Invoice PDF",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/pdf",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/documents/commercial/invoices/1/pdf",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "documents", "commercial", "invoices", "1", "pdf"]
+                        }
+                    }
+                },
+                {
+                    "name": "Download Invoice XML",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/xml",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/documents/commercial/invoices/1/xml",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "documents", "commercial", "invoices", "1", "xml"]
+                        }
+                    }
+                },
+                {
+                    "name": "Send Invoice to DIAN",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/documents/commercial/invoices/1/send",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "documents", "commercial", "invoices", "1", "send"]
+                        }
+                    }
+                },
+                {
+                    "name": "Void Invoice",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"reason\": \"Factura con error en datos del cliente\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/documents/commercial/invoices/1/void",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "documents", "commercial", "invoices", "1", "void"]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Document Logs",
+            "item": [
+                {
+                    "name": "List Document Logs",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/documents/logs",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "documents", "logs"]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "DIAN Logs",
+            "item": [
+                {
+                    "name": "List DIAN Logs",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/documents/dian-logs",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "documents", "dian-logs"]
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}

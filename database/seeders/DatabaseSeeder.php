@@ -13,6 +13,7 @@ use Database\Seeders\RecurringDocumentSeeder;
 use Database\Seeders\BranchSeeder;
 use Database\Seeders\MasterDataSeeder;
 use Database\Seeders\CustomerSeeder;
+use Database\Seeders\Fiscal\FiscalSeeder;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -34,6 +35,7 @@ class DatabaseSeeder extends Seeder
             CustomerSeeder::class,
             ApprovalFlowSeeder::class,
             RecurringDocumentSeeder::class,
+            FiscalSeeder::class,
         ]);
 
         // Then create the test user with super-admin role

@@ -1,0 +1,341 @@
+{
+    "info": {
+        "_postman_id": "company-collection",
+        "name": "02 - Company & Branch Module",
+        "description": "Endpoints de gestión de empresas y sucursales",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Companies",
+            "item": [
+                {
+                    "name": "List Companies",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/companies",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "companies"]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Company",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"Test Company\",\n    \"trade_name\": \"Test Trade Name\",\n    \"document_type\": \"NIT\",\n    \"document_number\": \"900123456\",\n    \"verification_digit\": \"1\",\n    \"address\": \"Test Address 123\",\n    \"phone\": \"3001234567\",\n    \"email\": \"company@test.com\",\n    \"website\": \"www.test.com\",\n    \"country_id\": 1,\n    \"state_id\": 1,\n    \"city_id\": 1\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/companies",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "companies"]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Company",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/companies/1",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "companies", "1"]
+                        }
+                    }
+                },
+                {
+                    "name": "Update Company",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"Updated Company\",\n    \"trade_name\": \"Updated Trade Name\",\n    \"address\": \"Updated Address 123\",\n    \"phone\": \"3009876543\",\n    \"email\": \"updated@test.com\",\n    \"website\": \"www.updated.com\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/companies/1",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "companies", "1"]
+                        }
+                    }
+                },
+                {
+                    "name": "Delete Company",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/companies/1",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "companies", "1"]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Company Configuration",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/companies/1/configuration",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "companies", "1", "configuration"]
+                        }
+                    }
+                },
+                {
+                    "name": "Update Company Configuration",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"fiscal_regime\": \"common\",\n    \"tax_level\": \"national\",\n    \"accounting_regime\": \"simplified\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/companies/1/configuration",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "companies", "1", "configuration"]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Branches",
+            "item": [
+                {
+                    "name": "List Branches",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/branches",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "branches"]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Branch",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"company_id\": 1,\n    \"name\": \"Test Branch\",\n    \"code\": \"BR001\",\n    \"address\": \"Branch Address 123\",\n    \"phone\": \"3001234567\",\n    \"email\": \"branch@test.com\",\n    \"country_id\": 1,\n    \"state_id\": 1,\n    \"city_id\": 1\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/branches",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "branches"]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Branch",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/branches/1",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "branches", "1"]
+                        }
+                    }
+                },
+                {
+                    "name": "Update Branch",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"Updated Branch\",\n    \"code\": \"BR001\",\n    \"address\": \"Updated Branch Address\",\n    \"phone\": \"3009876543\",\n    \"email\": \"updated.branch@test.com\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/branches/1",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "branches", "1"]
+                        }
+                    }
+                },
+                {
+                    "name": "Delete Branch",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/branches/1",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "branches", "1"]
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}

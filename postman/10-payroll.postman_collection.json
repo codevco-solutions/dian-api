@@ -1,0 +1,236 @@
+{
+    "info": {
+        "_postman_id": "payroll-collection",
+        "name": "10 - Payroll Module",
+        "description": "Endpoints para la gestión de nómina electrónica",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Payroll Documents",
+            "item": [
+                {
+                    "name": "List Payroll Documents",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/payroll/documents",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "payroll", "documents"]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Payroll Document",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"employee_id\": 1,\n    \"period_start\": \"2024-01-01\",\n    \"period_end\": \"2024-01-15\",\n    \"payment_date\": \"2024-01-15\",\n    \"salary\": 2000000,\n    \"transportation_allowance\": 140606,\n    \"overtime\": {\n        \"regular\": 50000,\n        \"night\": 75000,\n        \"sunday_holiday\": 100000\n    },\n    \"deductions\": {\n        \"health\": 80000,\n        \"pension\": 80000,\n        \"solidarity_fund\": 0\n    },\n    \"notes\": \"Nómina primera quincena enero 2024\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/payroll/documents",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "payroll", "documents"]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Payroll Document",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/payroll/documents/1",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "payroll", "documents", "1"]
+                        }
+                    }
+                },
+                {
+                    "name": "Send to DIAN",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/payroll/documents/1/send",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "payroll", "documents", "1", "send"]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Employees",
+            "item": [
+                {
+                    "name": "List Employees",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/payroll/employees",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "payroll", "employees"]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Employee",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"first_name\": \"Juan\",\n    \"last_name\": \"Pérez\",\n    \"document_type\": \"CC\",\n    \"document_number\": \"1234567890\",\n    \"email\": \"juan@example.com\",\n    \"phone\": \"3001234567\",\n    \"address\": \"Calle 123\",\n    \"salary\": 2000000,\n    \"contract_type\": \"indefinido\",\n    \"start_date\": \"2024-01-01\",\n    \"position\": \"Desarrollador\",\n    \"department\": \"Tecnología\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/payroll/employees",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "payroll", "employees"]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Payroll Settings",
+            "item": [
+                {
+                    "name": "Get Settings",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/payroll/settings",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "payroll", "settings"]
+                        }
+                    }
+                },
+                {
+                    "name": "Update Settings",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"minimum_wage\": 1300000,\n    \"transportation_allowance\": 140606,\n    \"health_percentage\": 4,\n    \"pension_percentage\": 4,\n    \"solidarity_fund_threshold\": 4000000,\n    \"solidarity_fund_percentage\": 1\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/payroll/settings",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "payroll", "settings"]
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}

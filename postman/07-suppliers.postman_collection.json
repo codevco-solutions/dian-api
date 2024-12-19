@@ -1,0 +1,219 @@
+{
+    "info": {
+        "_postman_id": "suppliers-collection",
+        "name": "07 - Suppliers Module",
+        "description": "Endpoints para la gestión de proveedores",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Suppliers",
+            "item": [
+                {
+                    "name": "List Suppliers",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/suppliers",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "suppliers"]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Supplier",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"type\": \"company\",\n    \"document_type\": \"NIT\",\n    \"document_number\": \"900123456\",\n    \"verification_digit\": \"1\",\n    \"business_name\": \"Proveedor S.A.S\",\n    \"trade_name\": \"Proveedor\",\n    \"email\": \"contacto@proveedor.com\",\n    \"phone\": \"3001234567\",\n    \"address\": \"Calle Principal 123\",\n    \"country_id\": 1,\n    \"state_id\": 1,\n    \"city_id\": 1,\n    \"payment_term_id\": 1\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/suppliers",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "suppliers"]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Supplier",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/suppliers/1",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "suppliers", "1"]
+                        }
+                    }
+                },
+                {
+                    "name": "Update Supplier",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"email\": \"nuevo@proveedor.com\",\n    \"phone\": \"3009876543\",\n    \"address\": \"Nueva dirección principal\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/suppliers/1",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "suppliers", "1"]
+                        }
+                    }
+                },
+                {
+                    "name": "Delete Supplier",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/suppliers/1",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "suppliers", "1"]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Documents",
+            "item": [
+                {
+                    "name": "List Supplier Documents",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/suppliers/1/documents",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "suppliers", "1", "documents"]
+                        }
+                    }
+                },
+                {
+                    "name": "Upload Supplier Document",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "document",
+                                    "type": "file",
+                                    "src": "/path/to/document.pdf"
+                                },
+                                {
+                                    "key": "type",
+                                    "value": "rut",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "description",
+                                    "value": "RUT actualizado",
+                                    "type": "text"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/suppliers/1/documents",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "suppliers", "1", "documents"]
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}

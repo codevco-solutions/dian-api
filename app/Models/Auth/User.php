@@ -20,7 +20,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'phone',
         'is_active',
+        'settings',
         'remember_token'
     ];
 
@@ -31,7 +33,8 @@ class User extends Authenticatable
 
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'is_active' => 'boolean'
+        'is_active' => 'boolean',
+        'settings' => 'array'
     ];
 
     public function company(): BelongsTo

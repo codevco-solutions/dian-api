@@ -1,0 +1,291 @@
+{
+    "info": {
+        "_postman_id": "fiscal-collection",
+        "name": "03 - Fiscal Module",
+        "description": "Endpoints relacionados con configuración fiscal y DIAN",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "DIAN Resolutions",
+            "item": [
+                {
+                    "name": "List Resolutions",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/fiscal/resolutions",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "fiscal", "resolutions"]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Resolution",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"resolution_number\": \"18760000001\",\n    \"start_date\": \"2024-01-01\",\n    \"end_date\": \"2024-12-31\",\n    \"start_number\": 1,\n    \"end_number\": 99999999,\n    \"prefix\": \"FE\",\n    \"technical_key\": \"fc8eac422eba16e22ffd8c6f94b3f40a6e38162c\",\n    \"type\": \"invoice\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/fiscal/resolutions",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "fiscal", "resolutions"]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Resolution",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/fiscal/resolutions/1",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "fiscal", "resolutions", "1"]
+                        }
+                    }
+                },
+                {
+                    "name": "Update Resolution",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"resolution_number\": \"18760000001\",\n    \"start_date\": \"2024-01-01\",\n    \"end_date\": \"2024-12-31\",\n    \"start_number\": 1,\n    \"end_number\": 99999999,\n    \"prefix\": \"FE\",\n    \"technical_key\": \"fc8eac422eba16e22ffd8c6f94b3f40a6e38162c\",\n    \"type\": \"invoice\",\n    \"status\": \"active\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/fiscal/resolutions/1",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "fiscal", "resolutions", "1"]
+                        }
+                    }
+                },
+                {
+                    "name": "Delete Resolution",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/fiscal/resolutions/1",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "fiscal", "resolutions", "1"]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Tax Rules",
+            "item": [
+                {
+                    "name": "List Tax Rules",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/fiscal/tax-rules",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "fiscal", "tax-rules"]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Tax Rule",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"IVA 19%\",\n    \"code\": \"01\",\n    \"type\": \"iva\",\n    \"rate\": 19,\n    \"description\": \"Impuesto al Valor Agregado 19%\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/fiscal/tax-rules",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "fiscal", "tax-rules"]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Tax Rule",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/fiscal/tax-rules/1",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "fiscal", "tax-rules", "1"]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Document Numbering",
+            "item": [
+                {
+                    "name": "List Document Numbering Configs",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/fiscal/document-numbering",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "fiscal", "document-numbering"]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Document Numbering Config",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"document_type\": \"invoice\",\n    \"prefix\": \"FE\",\n    \"next_number\": 1,\n    \"padding\": 8,\n    \"branch_id\": 1\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/fiscal/document-numbering",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "fiscal", "document-numbering"]
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}

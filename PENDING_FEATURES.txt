@@ -24,18 +24,18 @@
 ✅ Historial de cambios
 
 ## 4. Configuración Fiscal
-- Reglas de impuestos más complejas
-- Retenciones automáticas
-- Configuración de IVA por región
-- Calendarios fiscales
-- Reportes fiscales
+✅ Reglas de impuestos más complejas
+✅ Retenciones automáticas
+✅ Configuración de IVA por región
+✅ Calendarios fiscales
+✅ Reportes fiscales
 
 ## 5. Numeración y Resoluciones
-- Gestión completa de resoluciones DIAN
-- Prefijos personalizados
-- Control de consecutivos por tipo de documento
-- Alertas de vencimiento de resoluciones
-- Validación de rangos
+✅ Gestión completa de resoluciones DIAN
+✅ Prefijos personalizados
+✅ Control de consecutivos por tipo de documento
+✅ Alertas de vencimiento de resoluciones
+✅ Validación de rangos
 
 ## 6. Pagos y Cartera
 - Múltiples formas de pago por transacción

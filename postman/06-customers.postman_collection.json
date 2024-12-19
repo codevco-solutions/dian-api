@@ -1,0 +1,399 @@
+{
+    "info": {
+        "_postman_id": "customers-collection",
+        "name": "06 - Customers Module",
+        "description": "Endpoints para la gestión de clientes",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Customers",
+            "item": [
+                {
+                    "name": "List Customers",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/customers",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "customers"]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Customer",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"type\": \"person\",\n    \"document_type\": \"CC\",\n    \"document_number\": \"1234567890\",\n    \"verification_digit\": null,\n    \"first_name\": \"Juan\",\n    \"last_name\": \"Pérez\",\n    \"email\": \"juan@example.com\",\n    \"phone\": \"3001234567\",\n    \"address\": \"Calle 123 # 45-67\",\n    \"country_id\": 1,\n    \"state_id\": 1,\n    \"city_id\": 1,\n    \"classification_id\": 1,\n    \"payment_term_id\": 1,\n    \"credit_limit\": 5000000\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/customers",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "customers"]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Customer",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/customers/1",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "customers", "1"]
+                        }
+                    }
+                },
+                {
+                    "name": "Update Customer",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"email\": \"nuevo.email@example.com\",\n    \"phone\": \"3009876543\",\n    \"address\": \"Nueva dirección\",\n    \"credit_limit\": 10000000\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/customers/1",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "customers", "1"]
+                        }
+                    }
+                },
+                {
+                    "name": "Delete Customer",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/customers/1",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "customers", "1"]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Classifications",
+            "item": [
+                {
+                    "name": "List Classifications",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/customers/classifications",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "customers", "classifications"]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Classification",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"VIP\",\n    \"description\": \"Clientes preferenciales\",\n    \"discount_percentage\": 10\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/customers/classifications",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "customers", "classifications"]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Payment Terms",
+            "item": [
+                {
+                    "name": "List Payment Terms",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/customers/payment-terms",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "customers", "payment-terms"]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Payment Term",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"30 días\",\n    \"days\": 30,\n    \"description\": \"Pago a 30 días\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/customers/payment-terms",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "customers", "payment-terms"]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Credit",
+            "item": [
+                {
+                    "name": "Get Customer Credit",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/customers/1/credit",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "customers", "1", "credit"]
+                        }
+                    }
+                },
+                {
+                    "name": "Update Credit Limit",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"credit_limit\": 15000000,\n    \"reason\": \"Aumento por buen historial de pagos\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/customers/1/credit",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "customers", "1", "credit"]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Documents",
+            "item": [
+                {
+                    "name": "List Customer Documents",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/customers/1/documents",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "customers", "1", "documents"]
+                        }
+                    }
+                },
+                {
+                    "name": "Upload Customer Document",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "document",
+                                    "type": "file",
+                                    "src": "/path/to/document.pdf"
+                                },
+                                {
+                                    "key": "type",
+                                    "value": "rut",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "description",
+                                    "value": "RUT actualizado",
+                                    "type": "text"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/customers/1/documents",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "customers", "1", "documents"]
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}

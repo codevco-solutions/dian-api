@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -99,7 +100,16 @@ class UserController extends Controller
             ], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        $user = $this->userService->create($validator->validated());
+        // Establecer valores por defecto
+        $data = $validator->validated();
+        $data['is_active'] = $data['is_active'] ?? true;
+        $data['settings'] = $data['settings'] ?? [];
+
+        $user = $this->userService->create($data);
+
+        // Asignar el rol al usuario
+        $role = Role::findById($data['role_id']);
+        $user->assignRole($role);
 
         return response()->json([
             'message' => 'User created successfully',

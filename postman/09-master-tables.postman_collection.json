@@ -1,0 +1,250 @@
+{
+    "info": {
+        "_postman_id": "master-tables-collection",
+        "name": "09 - Master Tables Module",
+        "description": "Endpoints para la gestión de tablas maestras del sistema",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Document Types",
+            "item": [
+                {
+                    "name": "List Document Types",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/master/document-types",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "master", "document-types"]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Document Type",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"code\": \"CC\",\n    \"name\": \"Cédula de Ciudadanía\",\n    \"description\": \"Documento de identidad colombiano\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/master/document-types",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "master", "document-types"]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Tax Types",
+            "item": [
+                {
+                    "name": "List Tax Types",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/master/tax-types",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "master", "tax-types"]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Tax Type",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"code\": \"01\",\n    \"name\": \"IVA\",\n    \"description\": \"Impuesto al Valor Agregado\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/master/tax-types",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "master", "tax-types"]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Payment Methods",
+            "item": [
+                {
+                    "name": "List Payment Methods",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/master/payment-methods",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "master", "payment-methods"]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Payment Method",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"code\": \"10\",\n    \"name\": \"Efectivo\",\n    \"description\": \"Pago en efectivo\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/master/payment-methods",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "master", "payment-methods"]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Currency Types",
+            "item": [
+                {
+                    "name": "List Currencies",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/master/currencies",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "master", "currencies"]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Currency",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"code\": \"COP\",\n    \"name\": \"Peso Colombiano\",\n    \"symbol\": \"$\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/master/currencies",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "master", "currencies"]
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}

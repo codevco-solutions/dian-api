@@ -49,6 +49,9 @@ use App\Http\Controllers\API\Document\DocumentTemplateController;
 use App\Http\Controllers\API\Document\DocumentAttachmentController;
 use App\Http\Controllers\API\Document\DocumentConversionController;
 use App\Http\Controllers\API\Document\DocumentChangeController;
+use App\Http\Controllers\API\Fiscal\DianResolutionController;
+use App\Http\Controllers\API\Fiscal\TaxRuleController;
+use App\Http\Controllers\API\Fiscal\DocumentNumberingConfigController;
 
 /*
 |--------------------------------------------------------------------------
@@ -560,5 +563,35 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::apiResource('payment-receipts', PaymentReceiptController::class);
         Route::post('payment-receipts/{paymentReceipt}/approve', [PaymentReceiptController::class, 'approve']);
         Route::post('payment-receipts/{paymentReceipt}/cancel', [PaymentReceiptController::class, 'cancel']);
+    });
+
+    // Fiscal Routes
+    Route::prefix('fiscal')->group(function () {
+        // Resoluciones DIAN
+        Route::prefix('dian-resolutions')->group(function () {
+            Route::get('/', [DianResolutionController::class, 'index']);
+            Route::post('/', [DianResolutionController::class, 'store']);
+            Route::get('/{resolution}', [DianResolutionController::class, 'show']);
+            Route::put('/{resolution}', [DianResolutionController::class, 'update']);
+            Route::get('/{resolution}/next-number', [DianResolutionController::class, 'getNextNumber']);
+        });
+
+        // Reglas de impuestos
+        Route::prefix('tax-rules')->group(function () {
+            Route::get('/', [TaxRuleController::class, 'index']);
+            Route::post('/', [TaxRuleController::class, 'store']);
+            Route::get('/{rule}', [TaxRuleController::class, 'show']);
+            Route::put('/{rule}', [TaxRuleController::class, 'update']);
+            Route::post('/{rule}/calculate', [TaxRuleController::class, 'calculateTax']);
+        });
+
+        // Configuración de numeración
+        Route::prefix('document-numbering')->group(function () {
+            Route::get('/', [DocumentNumberingConfigController::class, 'index']);
+            Route::post('/', [DocumentNumberingConfigController::class, 'store']);
+            Route::get('/{config}', [DocumentNumberingConfigController::class, 'show']);
+            Route::put('/{config}', [DocumentNumberingConfigController::class, 'update']);
+            Route::get('/{config}/generate-number', [DocumentNumberingConfigController::class, 'generateNextNumber']);
+        });
     });
 });
